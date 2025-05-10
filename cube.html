@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Matrix Cube</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+
+        /* Raining binary background */
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        .binary-char {
+            position: absolute;
+            color: #0f0;
+            font-size: 16px;
+            opacity: 0;
+            animation: fall linear;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        /* 3D Cube */
+        .scene {
+            display: flex;
+            align-items: center;
+            gap: 100px;
+        }
+
+        .cube-container {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateCube 12s infinite ease-in-out;
+        }
+
+        .face {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(0, 20, 0, 0.6);
+            border: 2px solid #0f0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            padding: 10px;
+            box-sizing: border-box;
+            box-shadow: 0 0 15px #0f0;
+        }
+
+        .digit {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: #0f0;
+            text-shadow: 0 0 8px #0f0;
+        }
+
+        .front { transform: translateZ(100px); }
+        .back { transform: rotateY(180deg) translateZ(100px); }
+        .right { transform: rotateY(90deg) translateZ(100px); }
+        .left { transform: rotateY(-90deg) translateZ(100px); }
+        .top { transform: rotateX(90deg) translateZ(100px); }
+        .bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+        @keyframes rotateCube {
+            0% { transform: rotateY(0) rotateX(0); }
+            33% { transform: rotateY(360deg) rotateX(0); }
+            66% { transform: rotateY(360deg) rotateX(180deg); }
+            100% { transform: rotateY(0) rotateX(0); }
+        }
+
+        /* Text Animation */
+        .text-container {
+            position: relative;
+            width: 350px;
+            height: 200px;
+        }
+
+        .text-line {
+            position: absolute;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 500;
+            font-size: 28px;
+            color: #0f0;
+            text-shadow: 0 0 10px #0f0;
+            white-space: nowrap;
+            right: 0;
+            opacity: 0;
+            display: flex;
+            gap: 15px;
+        }
+
+        .text-word {
+            display: inline-block;
+            overflow: hidden;
+            vertical-align: bottom;
+            position: relative;
+            min-width: 20px;
+            transform: translateX(30px);
+            opacity: 0;
+        }
+
+        .sentence-1 {
+            top: 0;
+        }
+
+        .sentence-2 {
+            top: 70px;
+        }
+
+        .magic-container {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            color: #0f0;
+            text-shadow: 0 0 5px #0f0;
+            opacity: 0;
+            animation: magicAppear 3s 4s forwards;
+        }
+
+        @keyframes magicAppear {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 0.7; transform: translateY(0); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { text-shadow: 0 0 5px #0f0; }
+            50% { text-shadow: 0 0 20px #0f0, 0 0 30px #0f0; }
+            100% { text-shadow: 0 0 5px #0f0; }
+        }
+    </style>
+</head>
+<body>
+    <div id="matrix"></div>
+    
+    <div class="scene">
+        <div class="cube-container">
+            <div class="face front"></div>
+            <div class="face back"></div>
+            <div class="face right"></div>
+            <div class="face left"></div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+        </div>
+
+        <div class="text-container">
+            <div class="text-line sentence-1" id="sentence1"></div>
+            <div class="text-line sentence-2" id="sentence2"></div>
+            <div class="magic-container pulse" id="magicText">DeepSeek AI Magic</div>
+        </div>
+    </div>
+
+    <script>
+        // Create raining binary background
+        function createMatrix() {
+            const matrix = document.getElementById('matrix');
+            const chars = '01';
+            const columns = Math.floor(window.innerWidth / 20);
+            
+            for (let i = 0; i < columns; i++) {
+                const delay = Math.random() * 5;
+                const duration = 5 + Math.random() * 10;
+                
+                const char = document.createElement('div');
+                char.className = 'binary-char';
+                char.textContent = chars.charAt(Math.floor(Math.random() * chars.length));
+                char.style.left = `${i * 20}px`;
+                char.style.top = `-20px`;
+                char.style.animationDelay = `${delay}s`;
+                char.style.animationDuration = `${duration}s`;
+                
+                matrix.appendChild(char);
+                
+                // Create continuous stream
+                setInterval(() => {
+                    const newChar = document.createElement('div');
+                    newChar.className = 'binary-char';
+                    newChar.textContent = chars.charAt(Math.floor(Math.random() * chars.length));
+                    newChar.style.left = `${i * 20}px`;
+                    newChar.style.top = `-20px`;
+                    newChar.style.animationDuration = `${5 + Math.random() * 10}s`;
+                    matrix.appendChild(newChar);
+                    
+                    // Remove old elements
+                    setTimeout(() => {
+                        newChar.remove();
+                    }, duration * 1000);
+                }, duration * 1000);
+            }
+        }
+
+        // Create binary cube faces
+        function createCube() {
+            const faces = document.querySelectorAll('.face');
+            
+            faces.forEach(face => {
+                for (let i = 0; i < 9; i++) {
+                    const digit = document.createElement('div');
+                    digit.className = 'digit';
+                    digit.textContent = Math.random() > 0.5 ? '1' : '0';
+                    face.appendChild(digit);
+                }
+            });
+
+            // Animate digits
+            setInterval(() => {
+                const digits = document.querySelectorAll('.digit');
+                digits.forEach(digit => {
+                    if (Math.random() > 0.9) {
+                        digit.textContent = digit.textContent === '1' ? '0' : '1';
+                        digit.style.opacity = 0;
+                        setTimeout(() => {
+                            digit.style.opacity = 1;
+                        }, 100);
+                    }
+                });
+            }, 100);
+        }
+
+        // Animated text
+        function animateText() {
+            const sentence1 = "Made by zainx";
+            const sentence2 = "Creativity at the peak";
+            const wordDelay = 0.15;
+            const displayTime = 1.5;
+            const sentenceDelay = 0.5;
+            const cycleTime = (sentence1.split(' ').length + sentence2.split(' ').length) * wordDelay + displayTime * 2 + sentenceDelay;
+            
+            const container1 = document.getElementById('sentence1');
+            const container2 = document.getElementById('sentence2');
+            
+            function createWordElements(container, sentence) {
+                container.innerHTML = '';
+                sentence.split(' ').forEach(word => {
+                    const span = document.createElement('span');
+                    span.className = 'text-word';
+                    span.textContent = word;
+                    container.appendChild(span);
+                });
+                container.style.opacity = '1';
+            }
+            
+            function animateWords(words, direction = 'in') {
+                return new Promise(resolve => {
+                    words.forEach((word, i) => {
+                        setTimeout(() => {
+                            word.style.transition = 'all 0.3s ease-out';
+                            if (direction === 'in') {
+                                word.style.transform = 'translateX(0)';
+                                word.style.opacity = '1';
+                            } else {
+                                word.style.transform = 'translateX(-30px)';
+                                word.style.opacity = '0';
+                            }
+                        }, i * wordDelay * 1000);
+                    });
+                    
+                    setTimeout(resolve, words.length * wordDelay * 1000 + 300);
+                });
+            }
+            
+            async function animateSentence(container, sentence) {
+                createWordElements(container, sentence);
+                const words = Array.from(container.querySelectorAll('.text-word'));
+                
+                // Animate words in
+                await animateWords(words, 'in');
+                
+                // Wait display time
+                await new Promise(resolve => setTimeout(resolve, displayTime * 1000));
+                
+                // Animate words out
+                await animateWords(words, 'out');
+                
+                // Hide container
+                container.style.opacity = '0';
+            }
+            
+            async function startAnimation() {
+                while (true) {
+                    await animateSentence(container1, sentence1);
+                    await new Promise(resolve => setTimeout(resolve, sentenceDelay * 1000));
+                    await animateSentence(container2, sentence2);
+                    await new Promise(resolve => setTimeout(resolve, sentenceDelay * 1000));
+                }
+            }
+            
+            startAnimation();
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            createMatrix();
+            createCube();
+            animateText();
+            
+            // Add random binary flashes
+            setInterval(() => {
+                const randomX = Math.random() * window.innerWidth;
+                const randomY = Math.random() * window.innerHeight;
+                const flash = document.createElement('div');
+                flash.textContent = Math.random() > 0.5 ? '1' : '0';
+                flash.style.position = 'absolute';
+                flash.style.left = `${randomX}px`;
+                flash.style.top = `${randomY}px`;
+                flash.style.color = '#0f0';
+                flash.style.fontSize = '24px';
+                flash.style.textShadow = '0 0 10px #0f0';
+                flash.style.opacity = '0';
+                flash.style.transition = 'all 0.5s';
+                document.body.appendChild(flash);
+                
+                setTimeout(() => {
+                    flash.style.opacity = '1';
+                    flash.style.transform = 'scale(1.5)';
+                }, 10);
+                
+                setTimeout(() => {
+                    flash.style.opacity = '0';
+                    setTimeout(() => {
+                        flash.remove();
+                    }, 500);
+                }, 500);
+            }, 300);
+        });
+    </script>
+</body>
+</html>
