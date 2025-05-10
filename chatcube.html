@@ -7,13 +7,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      background: #000;
+      background: #e2c2c2;
       margin: 0;
       height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      perspective: 1000px;
+      perspective: 6000px;
       overflow: hidden;
       font-family: 'Poppins', sans-serif;
     }
@@ -31,7 +31,7 @@
       position: absolute;
       width: 200px;
       height: 200px;
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(158, 13, 13, 0.03);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       border: none;
@@ -45,7 +45,7 @@
     }
 
     .front  { transform: rotateY(  0deg) translateZ(100px); }
-    .back   { transform: rotateY(180deg) translateZ(100px); }
+    .back   { transform: rotateY(177deg) translateZ(100px); }
     .right  {
       transform: rotateY(90deg) translateZ(100px);
       flex-direction: row;
@@ -67,7 +67,7 @@
       opacity: 0;
       transform: scale(0.8);
       transition: all 0.2s ease;
-      color: #0f0;
+      color: rgb(196, 129, 35);
       text-shadow: 0 0 5px #0f0;
       font-weight: 600;
     }
@@ -78,7 +78,7 @@
     }
 
     @keyframes pulse {
-      0%, 100% {
+      0%, 600% {
         box-shadow: 0 0 15px rgba(0,255,0,0.2);
       }
       50% {
