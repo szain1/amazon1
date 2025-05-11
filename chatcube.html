@@ -1,184 +1,356 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI Magic Cube</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      background: #e2c2c2;
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      perspective: 6000px;
-      overflow: hidden;
-      font-family: 'Poppins', sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Key to Freedom Cube</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
 
-    .scene {
-      width: 200px;
-      height: 200px;
-      transform-style: preserve-3d;
-      transition: transform 2s ease-in-out;
-      position: relative;
-      animation: pulse 2s infinite;
-    }
+        /* Raining binary background */
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+        }
 
-    .cube-face {
-      position: absolute;
-      width: 200px;
-      height: 200px;
-      background: rgba(158, 13, 13, 0.03);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: none;
-      color: #0f0;
-      box-shadow: 0 0 15px rgba(0,255,0,0.3), inset 0 0 8px rgba(0,255,0,0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      font-size: 20px;
-    }
+        .binary-char {
+            position: absolute;
+            color: #0f0;
+            font-size: 16px;
+            opacity: 0;
+            animation: fall linear;
+        }
 
-    .front  { transform: rotateY(  0deg) translateZ(100px); }
-    .back   { transform: rotateY(177deg) translateZ(100px); }
-    .right  {
-      transform: rotateY(90deg) translateZ(100px);
-      flex-direction: row;
-      overflow: hidden;
-    }
-    .left   { transform: rotateY(-90deg) translateZ(100px); }
-    .top    { transform: rotateX(90deg) translateZ(100px); }
-    .bottom { transform: rotateX(-90deg) translateZ(100px); }
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
 
-    .text-container {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      padding: 10px;
-      justify-content: center;
-    }
+        /* 3D Cube */
+        .scene {
+            display: flex;
+            align-items: center;
+            gap: 100px;
+        }
 
-    .word {
-      opacity: 0;
-      transform: scale(0.8);
-      transition: all 0.2s ease;
-      color: rgb(196, 129, 35);
-      text-shadow: 0 0 5px #0f0;
-      font-weight: 600;
-    }
+        .cube-container {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateCube 12s infinite ease-in-out;
+        }
 
-    .word.show {
-      opacity: 1;
-      transform: scale(1);
-    }
+        .face {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(0, 20, 0, 0.6);
+            border: 2px solid #0f0;
+            padding: 10px;
+            box-sizing: border-box;
+            box-shadow: 0 0 15px #0f0;
+            overflow: hidden;
+        }
 
-    @keyframes pulse {
-      0%, 600% {
-        box-shadow: 0 0 15px rgba(0,255,0,0.2);
-      }
-      50% {
-        box-shadow: 0 0 25px rgba(0,255,0,0.6);
-      }
-    }
+        .scrolling-text {
+            position: absolute;
+            width: 100%;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            text-align: center;
+            white-space: nowrap;
+            transform: translateY(100%);
+            animation: scroll-up 8s linear infinite;
+        }
 
-    /* Optional star particles for effect */
-    .stars {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      background: radial-gradient(circle, rgba(0,255,0,0.15) 1px, transparent 1px);
-      background-size: 20px 20px;
-      z-index: -1;
-    }
-  </style>
+        @keyframes scroll-up {
+            0% { transform: translateY(100%); }
+            100% { transform: translateY(-100%); }
+        }
+
+        .front { transform: translateZ(100px); }
+        .back { transform: rotateY(180deg) translateZ(100px); }
+        .right { transform: rotateY(90deg) translateZ(100px); }
+        .left { transform: rotateY(-90deg) translateZ(100px); }
+        .top { transform: rotateX(90deg) translateZ(100px); }
+        .bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+        @keyframes rotateCube {
+            0% { transform: rotateY(0) rotateX(0); }
+            33% { transform: rotateY(360deg) rotateX(0); }
+            66% { transform: rotateY(360deg) rotateX(180deg); }
+            100% { transform: rotateY(0) rotateX(0); }
+        }
+
+        /* Text Animation */
+        .text-container {
+            position: relative;
+            width: 350px;
+            height: 200px;
+        }
+
+        .text-line {
+            position: absolute;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 500;
+            font-size: 28px;
+            color: #0f0;
+            text-shadow: 0 0 10px #0f0;
+            white-space: nowrap;
+            right: 0;
+            opacity: 0;
+            display: flex;
+            gap: 15px;
+        }
+
+        .text-word {
+            display: inline-block;
+            overflow: hidden;
+            vertical-align: bottom;
+            position: relative;
+            min-width: 20px;
+            transform: translateX(30px);
+            opacity: 0;
+        }
+
+        .sentence-1 {
+            top: 0;
+        }
+
+        .sentence-2 {
+            top: 70px;
+        }
+
+        .magic-container {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            color: #0f0;
+            text-shadow: 0 0 5px #0f0;
+            opacity: 0;
+            animation: magicAppear 3s 4s forwards;
+        }
+
+        @keyframes magicAppear {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 0.7; transform: translateY(0); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { text-shadow: 0 0 5px #0f0; }
+            50% { text-shadow: 0 0 20px #0f0, 0 0 30px #0f0; }
+            100% { text-shadow: 0 0 5px #0f0; }
+        }
+    </style>
 </head>
 <body>
+    <div id="matrix"></div>
+    
+    <div class="scene">
+        <div class="cube-container">
+            <div class="face front"></div>
+            <div class="face back"></div>
+            <div class="face right"></div>
+            <div class="face left"></div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+        </div>
 
-<div class="scene" id="cube">
-  <div class="cube-face front">101010</div>
-  <div class="cube-face back">010101</div>
-  <div class="cube-face right" id="sentence-container">
-    <div class="text-container" id="text"></div>
-  </div>
-  <div class="cube-face left">001100</div>
-  <div class="cube-face top">111000</div>
-  <div class="cube-face bottom">000111</div>
-  <div class="stars"></div>
-</div>
+        <div class="text-container">
+            <div class="text-line sentence-1" id="sentence1"></div>
+            <div class="text-line sentence-2" id="sentence2"></div>
+            <div class="magic-container pulse" id="magicText">DeepSeek AI Magic</div>
+        </div>
+    </div>
 
-<script>
-  const cube = document.getElementById('cube');
-  const textContainer = document.getElementById('text');
+    <script>
+        // Create raining binary background
+        function createMatrix() {
+            const matrix = document.getElementById('matrix');
+            const chars = '01';
+            const columns = Math.floor(window.innerWidth / 20);
+            
+            for (let i = 0; i < columns; i++) {
+                const delay = Math.random() * 5;
+                const duration = 5 + Math.random() * 10;
+                
+                const char = document.createElement('div');
+                char.className = 'binary-char';
+                char.textContent = chars.charAt(Math.floor(Math.random() * chars.length));
+                char.style.left = `${i * 20}px`;
+                char.style.top = `-20px`;
+                char.style.animationDelay = `${delay}s`;
+                char.style.animationDuration = `${duration}s`;
+                
+                matrix.appendChild(char);
+                
+                // Create continuous stream
+                setInterval(() => {
+                    const newChar = document.createElement('div');
+                    newChar.className = 'binary-char';
+                    newChar.textContent = chars.charAt(Math.floor(Math.random() * chars.length));
+                    newChar.style.left = `${i * 20}px`;
+                    newChar.style.top = `-20px`;
+                    newChar.style.animationDuration = `${5 + Math.random() * 10}s`;
+                    matrix.appendChild(newChar);
+                    
+                    // Remove old elements
+                    setTimeout(() => {
+                        newChar.remove();
+                    }, duration * 1000);
+                }, duration * 1000);
+            }
+        }
 
-  const lines = [
-    "Made by zainx",
-    "Creativity at the peak",
-    "Conversing with code",
-    "Powered by ChatGPT",
-    "Logic meets imagination"
-  ];
+        // Create scrolling text on cube faces
+        function createCube() {
+            const faces = document.querySelectorAll('.face');
+            const text = "Financial Key to Freedom";
+            
+            faces.forEach(face => {
+                // Create multiple lines for continuous scrolling
+                for (let i = 0; i < 5; i++) {
+                    const scrollingText = document.createElement('div');
+                    scrollingText.className = 'scrolling-text';
+                    scrollingText.textContent = text;
+                    scrollingText.style.animationDelay = `${i * 1.5}s`; // Stagger animations
+                    face.appendChild(scrollingText);
+                }
+            });
+        }
 
-  let rotateAngle = 0;
-  let fullSpin = true;
-  let lineIndex = 0;
+        // Animated text
+        function animateText() {
+            const sentence1 = "Made by zainx";
+            const sentence2 = "Creativity at the peak";
+            const wordDelay = 0.15;
+            const displayTime = 1.5;
+            const sentenceDelay = 0.5;
+            const cycleTime = (sentence1.split(' ').length + sentence2.split(' ').length) * wordDelay + displayTime * 2 + sentenceDelay;
+            
+            const container1 = document.getElementById('sentence1');
+            const container2 = document.getElementById('sentence2');
+            
+            function createWordElements(container, sentence) {
+                container.innerHTML = '';
+                sentence.split(' ').forEach(word => {
+                    const span = document.createElement('span');
+                    span.className = 'text-word';
+                    span.textContent = word;
+                    container.appendChild(span);
+                });
+                container.style.opacity = '1';
+            }
+            
+            function animateWords(words, direction = 'in') {
+                return new Promise(resolve => {
+                    words.forEach((word, i) => {
+                        setTimeout(() => {
+                            word.style.transition = 'all 0.3s ease-out';
+                            if (direction === 'in') {
+                                word.style.transform = 'translateX(0)';
+                                word.style.opacity = '1';
+                            } else {
+                                word.style.transform = 'translateX(-30px)';
+                                word.style.opacity = '0';
+                            }
+                        }, i * wordDelay * 1000);
+                    });
+                    
+                    setTimeout(resolve, words.length * wordDelay * 1000 + 300);
+                });
+            }
+            
+            async function animateSentence(container, sentence) {
+                createWordElements(container, sentence);
+                const words = Array.from(container.querySelectorAll('.text-word'));
+                
+                // Animate words in
+                await animateWords(words, 'in');
+                
+                // Wait display time
+                await new Promise(resolve => setTimeout(resolve, displayTime * 1000));
+                
+                // Animate words out
+                await animateWords(words, 'out');
+                
+                // Hide container
+                container.style.opacity = '0';
+            }
+            
+            async function startAnimation() {
+                while (true) {
+                    await animateSentence(container1, sentence1);
+                    await new Promise(resolve => setTimeout(resolve, sentenceDelay * 1000));
+                    await animateSentence(container2, sentence2);
+                    await new Promise(resolve => setTimeout(resolve, sentenceDelay * 1000));
+                }
+            }
+            
+            startAnimation();
+        }
 
-  function rotateCube() {
-    rotateAngle += fullSpin ? 360 : 180;
-    cube.style.transform = `rotateX(${rotateAngle}deg) rotateY(${rotateAngle}deg)`;
-    fullSpin = !fullSpin;
-    setTimeout(rotateCube, 3000);
-  }
-
-  function displayWords(sentence) {
-    textContainer.innerHTML = '';
-    const words = sentence.split(' ');
-    words.forEach((word, i) => {
-      const span = document.createElement('span');
-      span.classList.add('word');
-      span.textContent = word;
-      textContainer.appendChild(span);
-      setTimeout(() => {
-        span.classList.add('show');
-        // playBeep(); // Optional: uncomment if adding sound
-      }, i * 200);
-    });
-
-    // After display, remove them one by one
-    setTimeout(() => {
-      const spans = [...textContainer.querySelectorAll('.word')];
-      spans.forEach((span, i) => {
-        setTimeout(() => {
-          span.classList.remove('show');
-          // playBeep(); // Optional: uncomment if adding sound
-        }, i * 150);
-      });
-    }, 1800);
-  }
-
-  function loopText() {
-    displayWords(lines[lineIndex]);
-    lineIndex = (lineIndex + 1) % lines.length;
-    setTimeout(loopText, 3500);
-  }
-
-  // Optional beep (stub)
-  /*
-  function playBeep() {
-    const beep = new Audio('beep.mp3'); // Add a small sound file
-    beep.volume = 0.05;
-    beep.play();
-  }
-  */
-
-  rotateCube();
-  loopText();
-</script>
-
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            createMatrix();
+            createCube();
+            animateText();
+            
+            // Add random binary flashes
+            setInterval(() => {
+                const randomX = Math.random() * window.innerWidth;
+                const randomY = Math.random() * window.innerHeight;
+                const flash = document.createElement('div');
+                flash.textContent = Math.random() > 0.5 ? '1' : '0';
+                flash.style.position = 'absolute';
+                flash.style.left = `${randomX}px`;
+                flash.style.top = `${randomY}px`;
+                flash.style.color = '#0f0';
+                flash.style.fontSize = '24px';
+                flash.style.textShadow = '0 0 10px #0f0';
+                flash.style.opacity = '0';
+                flash.style.transition = 'all 0.5s';
+                document.body.appendChild(flash);
+                
+                setTimeout(() => {
+                    flash.style.opacity = '1';
+                    flash.style.transform = 'scale(1.5)';
+                }, 10);
+                
+                setTimeout(() => {
+                    flash.style.opacity = '0';
+                    setTimeout(() => {
+                        flash.remove();
+                    }, 500);
+                }, 500);
+            }, 300);
+        });
+    </script>
 </body>
 </html>
