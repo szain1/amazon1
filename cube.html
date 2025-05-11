@@ -3,19 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Binary Matrix Cube</title>
+    <title>Purple Matrix Cube</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 0;
-            background-color: #000;
             overflow: hidden;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             perspective: 1000px;
+        }
+
+        /* Video background */
+        #video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            object-fit: cover;
         }
 
         /* Raining binary background */
@@ -31,7 +41,7 @@
 
         .binary-char {
             position: absolute;
-            color: #0f0;
+            color: #fff;
             font-size: 16px;
             opacity: 0;
             animation: fall linear;
@@ -63,14 +73,14 @@
             position: absolute;
             width: 200px;
             height: 200px;
-            background: rgba(0, 20, 0, 0.6);
-            border: 2px solid #0f0;
+            background: rgba(80, 0, 80, 0.6);
+            border: 2px solid #b300ff;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(3, 1fr);
             padding: 10px;
             box-sizing: border-box;
-            box-shadow: 0 0 15px #0f0;
+            box-shadow: 0 0 15px #b300ff;
         }
 
         .digit {
@@ -78,8 +88,8 @@
             justify-content: center;
             align-items: center;
             font-size: 24px;
-            color: #0f0;
-            text-shadow: 0 0 8px #0f0;
+            color: #fff;
+            text-shadow: 0 0 8px #fff;
         }
 
         .front { transform: translateZ(100px); }
@@ -108,8 +118,8 @@
             font-family: 'Orbitron', sans-serif;
             font-weight: 500;
             font-size: 28px;
-            color: #0f0;
-            text-shadow: 0 0 10px #0f0;
+            color: white;
+            text-shadow: 0 0 10px white;
             white-space: nowrap;
             right: 0;
             opacity: 0;
@@ -141,8 +151,8 @@
             right: 0;
             font-family: 'Montserrat', sans-serif;
             font-size: 18px;
-            color: #0f0;
-            text-shadow: 0 0 5px #0f0;
+            color: white;
+            text-shadow: 0 0 5px white;
             opacity: 0;
             animation: magicAppear 3s 4s forwards;
         }
@@ -157,13 +167,19 @@
         }
 
         @keyframes pulse {
-            0% { text-shadow: 0 0 5px #0f0; }
-            50% { text-shadow: 0 0 20px #0f0, 0 0 30px #0f0; }
-            100% { text-shadow: 0 0 5px #0f0; }
+            0% { text-shadow: 0 0 5px white; }
+            50% { text-shadow: 0 0 20px white, 0 0 30px white; }
+            100% { text-shadow: 0 0 5px white; }
         }
     </style>
 </head>
 <body>
+    <!-- Video Background -->
+    <video id="video-background" autoplay muted loop>
+        <source src="vid.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
     <div id="matrix"></div>
     
     <div class="scene">
@@ -336,9 +352,9 @@
                 flash.style.position = 'absolute';
                 flash.style.left = `${randomX}px`;
                 flash.style.top = `${randomY}px`;
-                flash.style.color = '#0f0';
+                flash.style.color = 'white';
                 flash.style.fontSize = '24px';
-                flash.style.textShadow = '0 0 10px #0f0';
+                flash.style.textShadow = '0 0 10px white';
                 flash.style.opacity = '0';
                 flash.style.transition = 'all 0.5s';
                 document.body.appendChild(flash);
