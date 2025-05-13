@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basit Ali - Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== GLOBAL STYLES ===== */
+        :root {
+            --primary: #40C4FF;  /* Flutter teal */
+            --secondary: #BB86FC; /* AI purple */
+            --accent: #FFD700;   /* Gold */
+            --text-light: #F8F9FA;
+            --text-muted: #ADB5BD;
+            --bg-dark: #121212;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #000;
+            color: var(--text-light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ===== SECTION 1 WITH CUBE ===== */
+        .section1 {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ===== 3D CUBE STYLES ===== */
+        .cube-container {
+            width: 180px;
+            height: 180px;
+            position: relative;
+            margin-bottom: 60px;
+            transform-style: preserve-3d;
+            animation: rotateCube 12s infinite ease-in-out;
+        }
+
+        @media (min-width: 768px) {
+            .cube-container {
+                width: 220px;
+                height: 220px;
+                margin-bottom: 80px;
+            }
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(64, 196, 255, 0.15);
+            border: 1px solid rgba(187, 134, 252, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(187, 134, 252, 0.4);
+        }
+
+        .cube-face img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .cube-face:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Cube face positions */
+        .front { transform: translateZ(90px); }
+        .back { transform: rotateY(180deg) translateZ(90px); }
+        .right { transform: rotateY(90deg) translateZ(90px); }
+        .left { transform: rotateY(-90deg) translateZ(90px); }
+        .top { transform: rotateX(90deg) translateZ(90px); }
+        .bottom { transform: rotateX(-90deg) translateZ(90px); }
+
+        @media (min-width: 768px) {
+            .front { transform: translateZ(110px); }
+            .back { transform: rotateY(180deg) translateZ(110px); }
+            .right { transform: rotateY(90deg) translateZ(110px); }
+            .left { transform: rotateY(-90deg) translateZ(110px); }
+            .top { transform: rotateX(90deg) translateZ(110px); }
+            .bottom { transform: rotateX(-90deg) translateZ(110px); }
+        }
+
+        /* Cube animation from your cube code */
+        @keyframes rotateCube {
+            0% { transform: rotateY(0) rotateX(0); }
+            33% { transform: rotateY(360deg) rotateX(0); }
+            66% { transform: rotateY(360deg) rotateX(180deg); }
+            100% { transform: rotateY(0) rotateX(0); }
+        }
+
+        /* ===== CENTERED TEXT ===== */
+        .hero-text-container {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-text {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            position: absolute;
+            width: 100%;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            line-height: 1.3;
+        }
+
+        @media (min-width: 768px) {
+            .hero-text {
+                font-size: 3rem;
+            }
+        }
+
+        .hero-text.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-text span {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Rest of your existing portfolio styles... */
+    </style>
+</head>
+<body>
+    <!-- Your existing navbar... -->
+
+    <!-- ===== SECTION 1 WITH CUBE AND TEXT ===== -->
+    <section class="section1">
+        <!-- 3D Cube -->
+        <div class="cube-container">
+            <div class="cube-face front">
+                <img src="flutter.jpg" alt="Project 1">
+            </div>
+            <div class="cube-face back">
+                <img src="dart.jpg" alt="Project 2">
+            </div>
+            <div class="cube-face right">
+                <img src="flutter.jpg" alt="Project 3">
+            </div>
+            <div class="cube-face left">
+                <img src="dart.jpg" alt="Project 4">
+            </div>
+            <div class="cube-face top">
+                <img src="flutter.jpg" alt="Project 5">
+            </div>
+            <div class="cube-face bottom">
+                <img src="images/project6.jpg" alt="Project 6">
+            </div>
+        </div>
+
+        <!-- Centered Text -->
+        <div class="hero-text-container">
+            <h1 class="hero-text" id="text1">Explore the world of <span>innovative</span> app development with Basit</h1>
+            <h1 class="hero-text" id="text2"><span>Cross-platform</span> magic using Flutter and Dart technology.</h1>
+            <h1 class="hero-text" id="text3">Build smart apps enhanced with <span>cutting-edge AI</span>.</h1>
+            <h1 class="hero-text" id="text4">Your dream app—<span>designed</span>, <span>developed</span>, and <span>delivered</span>.</h1>
+        </div>
+    </section>
+
+    <!-- Rest of your portfolio content... -->
+
+    <script>
+        // ===== TEXT ANIMATION =====
+        const texts = [
+            "Explore the world of innovative app development with Basit",
+            "Cross-platform magic using Flutter and Dart technology.",
+            "Build smart apps enhanced with cutting-edge AI.",
+            "Your dream app—designed, developed, and delivered."
+        ];
+        
+        const textElements = [
+            document.getElementById('text1'),
+            document.getElementById('text2'),
+            document.getElementById('text3'),
+            document.getElementById('text4')
+        ];
+        
+        let currentIndex = 0;
+        
+        function animateText() {
+            // Hide all texts
+            textElements.forEach(el => {
+                el.classList.remove('active');
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+            });
+            
+            // Show current text with animation
+            textElements[currentIndex].classList.add('active');
+            textElements[currentIndex].style.opacity = '1';
+            textElements[currentIndex].style.transform = 'translateY(0)';
+            
+            // Move to next text
+            currentIndex = (currentIndex + 1) % textElements.length;
+            
+            // Repeat every 5 seconds (3s visible + 2s transition)
+            setTimeout(animateText, 5000);
+        }
+        
+        // Start animation
+        setTimeout(animateText, 500);
+
+        // ===== CUBE IMAGE HOVER EFFECTS =====
+        document.querySelectorAll('.cube-face img').forEach(img => {
+            img.addEventListener('mouseenter', () => {
+                img.style.transform = 'scale(1.1)';
+            });
+            
+            img.addEventListener('mouseleave', () => {
+                img.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
