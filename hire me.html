@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hire Me - Flutter Developer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <style>
+        /* ===== BASE STYLES ===== */
+        :root {
+            --dark-bg: #0f0c29;
+            --darker-bg: #0a0821;
+            --primary: #6e45e2;
+            --secondary: #88d3ce;
+            --accent: #ff7e5f;
+            --text-light: #f8f9fa;
+            --text-muted: #b8c2cc;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg), var(--darker-bg));
+            color: var(--text-light);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        section {
+            padding: 4rem 0;
+            position: relative;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+        }
+
+        /* ===== NEURAL CIRCUIT BACKGROUND ===== */
+        .circuit-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(110, 69, 226, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(136, 211, 206, 0.15) 0%, transparent 50%);
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .circuit-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
+            height: 1px;
+            animation: circuitFlow 8s linear infinite;
+            opacity: 0.1;
+        }
+
+        @keyframes circuitFlow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* ===== CONTACT FORM SECTION ===== */
+        .contact-intro {
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            text-align: center;
+        }
+
+        .contact-form-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-form-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(110, 69, 226, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(110, 69, 226, 0.2);
+        }
+
+        textarea.form-input {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(110, 69, 226, 0.4);
+        }
+
+        .success-message {
+            display: none;
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            color: #28a745;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        /* ===== FREELANCE PLATFORMS GRID ===== */
+        .platforms-intro {
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            text-align: center;
+        }
+
+        .platforms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .platform-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(110, 69, 226, 0.1) 0%, transparent 70%);
+            transform: rotate(45deg);
+            transition: var(--transition);
+            opacity: 0;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(110, 69, 226, 0.3);
+            border-color: rgba(110, 69, 226, 0.3);
+        }
+
+        .platform-card:hover::before {
+            opacity: 1;
+        }
+
+        .platform-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin: 0 auto 1.5rem;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+            display: block;
+        }
+
+        .platform-name {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .platform-tagline {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .platform-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(110, 69, 226, 0.3);
+            width: 100%;
+        }
+
+        .platform-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(110, 69, 226, 0.4);
+        }
+
+        /* ===== CONTACT INFO SECTION ===== */
+        .contact-info-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 4rem auto;
+            max-width: 800px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .contact-methods {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .contact-method:hover {
+            background: rgba(110, 69, 226, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .contact-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .contact-details {
+            text-align: left;
+        }
+
+        .contact-type {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .contact-value {
+            font-weight: 500;
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+
+        /* ===== RESPONSIVE STYLES ===== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            section {
+                padding: 2rem 0;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .platforms-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-form-container,
+            .contact-info-section {
+                padding: 2rem 1rem;
+            }
+            
+            .contact-methods {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Neural Circuit Background -->
+    <div class="circuit-bg" id="circuit-bg"></div>
+
+    <div class="container">
+        <!-- Contact Form Section -->
+        <section id="contact">
+            <div class="contact-intro animate-in">
+                <h2>Let's Work Together</h2>
+                <p>Have a project in mind or want to discuss potential collaboration opportunities? I'd love to hear from you! Fill out the form below and I'll get back to you within 24 hours.</p>
+                <p>Whether you need a complete app built from scratch, help with an existing project, or just want to chat about your ideas, I'm here to help bring your vision to life.</p>
+            </div>
+            
+            <div class="contact-form-container animate-in delay-1">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Your Name</label>
+                        <input type="text" id="name" name="name" class="form-input" required>
+                        <div class="error-message" id="name-error">Please enter your name</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                        <div class="error-message" id="email-error">Please enter a valid email</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message" class="form-label">Your Message</label>
+                        <textarea id="message" name="message" class="form-input" required></textarea>
+                        <div class="error-message" id="message-error">Please enter your message</div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Send Message</button>
+                    
+                    <div class="success-message" id="success-message">
+                        Thank you! Your message has been sent successfully. I'll get back to you soon.
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Freelance Platforms Section -->
+        <section id="platforms">
+            <div class="platforms-intro animate-in delay-2">
+                <h2>Hire Me Through These Platforms</h2>
+                <p>I'm available for freelance work through these trusted platforms. Each offers different benefits depending on your project needs:</p>
+                <p>Fiverr is great for quick, well-defined projects. Upwork works best for longer-term engagements. Connect with me on LinkedIn for professional networking and potential collaborations.</p>
+            </div>
+            
+            <div class="platforms-grid">
+                <!-- Fiverr Card -->
+                <div class="platform-card animate-in delay-1">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/02/Fiverr_Logo.svg" alt="Fiverr" class="platform-logo">
+                    <h3 class="platform-name">Fiverr</h3>
+                    <p class="platform-tagline">Perfect for quick, well-defined projects with fixed pricing. Get your app built with professional quality and fast delivery.</p>
+                    <a href="https://www.fiverr.com/yourprofile" class="platform-btn" target="_blank">View My Fiverr Profile</a>
+                </div>
+                
+                <!-- Upwork Card -->
+                <div class="platform-card animate-in delay-2">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Upwork_Logo.svg" alt="Upwork" class="platform-logo">
+                    <h3 class="platform-name">Upwork</h3>
+                    <p class="platform-tagline">Ideal for long-term projects with flexible hours. Get dedicated support and ongoing maintenance for your application.</p>
+                    <a href="https://www.upwork.com/freelancers/~yourprofile" class="platform-btn" target="_blank">View My Upwork Profile</a>
+                </div>
+                
+                <!-- LinkedIn Card -->
+                <div class="platform-card animate-in delay-3">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="platform-logo">
+                    <h3 class="platform-name">LinkedIn</h3>
+                    <p class="platform-tagline">Let's connect professionally! Great for networking, collaborations, or discussing potential opportunities.</p>
+                    <a href="https://www.linkedin.com/in/yourprofile" class="platform-btn" target="_blank">Connect on LinkedIn</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Information Section -->
+        <section id="direct-contact">
+            <div class="contact-info-section animate-in delay-3">
+                <h2>Direct Contact Information</h2>
+                <p>Prefer to contact me directly? Here are my professional contact details. I'm available during business hours and typically respond within 24 hours.</p>
+                
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        <span class="contact-icon">✉️</span>
+                        <div class="contact-details">
+                            <div class="contact-type">Email</div>
+                            <a href="mailto:your.email@example.com" class="contact-value">your.email@example.com</a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <span class="contact-icon">📱</span>
+                        <div class="contact-details">
+                            <div class="contact-type">Phone/WhatsApp</div>
+                            <a href="tel:+1234567890" class="contact-value">+1 (234) 567-890</a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <span class="contact-icon">💬</span>
+                        <div class="contact-details">
+                            <div class="contact-type">Telegram</div>
+                            <a href="https://t.me/yourusername" class="contact-value" target="_blank">@yourusername</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Initialize EmailJS (replace with your actual credentials)
+        emailjs.init('YOUR_EMAILJS_USER_ID');
+
+        // Create neural circuit background lines
+        const circuitBg = document.getElementById('circuit-bg');
+        for (let i = 0; i < 20; i++) {
+            const line = document.createElement('div');
+            line.className = 'circuit-line';
+            line.style.top = `${Math.random() * 100}%`;
+            line.style.width = `${Math.random() * 50 + 30}%`;
+            line.style.left = `${Math.random() * 50}%`;
+            line.style.animationDelay = `${Math.random() * 5}s`;
+            circuitBg.appendChild(line);
+        }
+
+        // Form validation and submission
+        const contactForm = document.getElementById('contactForm');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const messageInput = document.getElementById('message');
+        const successMessage = document.getElementById('success-message');
+
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Reset error messages
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            let isValid = true;
+            
+            // Validate name
+            if (!nameInput.value.trim()) {
+                document.getElementById('name-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput.value)) {
+                document.getElementById('email-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate message
+            if (!messageInput.value.trim()) {
+                document.getElementById('message-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // Send form data via EmailJS
+                emailjs.sendForm('YOUR_EMAILJS_SERVICE_ID', 'YOUR_EMAILJS_TEMPLATE_ID', this)
+                    .then(function() {
+                        // Show success message
+                        successMessage.style.display = 'block';
+                        contactForm.reset();
+                        
+                        // Hide success message after 5 seconds
+                        setTimeout(() => {
+                            successMessage.style.display = 'none';
+                        }, 5000);
+                    }, function(error) {
+                        console.error('Failed to send message:', error);
+                        alert('Oops! Something went wrong. Please try again later.');
+                    });
+            }
+        });
+
+        // Trigger animations when elements come into view
+        const animateElements = document.querySelectorAll('.animate-in');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        animateElements.forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
