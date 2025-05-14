@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ba138 | GitHub Portfolio</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #121212;
+            --bg-darker: #0a0a0a;
+            --bg-light: #1e1e1e;
+            --accent: #6e40c9;
+            --accent-light: #8a5cf5;
+            --text-primary: #f0f0f0;
+            --text-secondary: #b0b0b0;
+            --border: #333;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --info: #2196f3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent);
+        }
+
+        .profile-info h1 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .profile-info p {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-light);
+        }
+
+        .theme-toggle {
+            background: var(--bg-light);
+            border: none;
+            color: var(--text-primary);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--bg-light);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h3 {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-light);
+            margin-bottom: 5px;
+        }
+
+        .stat-card .description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .chart-container {
+            background: var(--bg-light);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-container h2 {
+            margin-bottom: 20px;
+            color: var(--accent-light);
+        }
+
+        .chart-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin: 30px 0 20px;
+            color: var(--accent-light);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .repos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .repo-card {
+            background: var(--bg-light);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            border-left: 4px solid var(--accent);
+        }
+
+        .repo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .repo-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--accent-light);
+        }
+
+        .repo-card p {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .repo-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .repo-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .repo-meta i {
+            color: var(--accent);
+        }
+
+        .repo-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .topic {
+            background: rgba(110, 64, 201, 0.2);
+            color: var(--accent-light);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            transition: all 0.3s;
+        }
+
+        .topic:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .repo-link {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .repo-link:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+        }
+
+        .streak-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .streak-card {
+            background: var(--bg-light);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .streak-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .streak-count {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-light);
+        }
+
+        .streak-details {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(30px, 1fr));
+            gap: 5px;
+        }
+
+        .day {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 3px;
+            background: var(--bg-darker);
+            position: relative;
+        }
+
+        .day[data-level="1"] {
+            background: rgba(110, 64, 201, 0.3);
+        }
+
+        .day[data-level="2"] {
+            background: rgba(110, 64, 201, 0.6);
+        }
+
+        .day[data-level="3"] {
+            background: rgba(110, 64, 201, 0.9);
+        }
+
+        .day[data-level="4"] {
+            background: var(--accent);
+        }
+
+        .day-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-light);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .day:hover .day-tooltip {
+            opacity: 1;
+        }
+
+        .skills-container {
+            background: var(--bg-light);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .skill-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .skill-name {
+            font-weight: 600;
+        }
+
+        .skill-percent {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        .skill-bar {
+            height: 8px;
+            background: var(--bg-darker);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 4px;
+        }
+
+        .freelance-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .freelance-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-light);
+            color: var(--text-primary);
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .freelance-link:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .freelance-link i {
+            font-size: 1.2rem;
+        }
+
+        .fiverr {
+            background: #1dbf73;
+            color: white;
+        }
+
+        .upwork {
+            background: #14a800;
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--accent);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .profile {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-row {
+                grid-template-columns: 1fr;
+            }
+
+            .repos-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-info h1 {
+                font-size: 1.5rem;
+            }
+
+            .stat-card .value {
+                font-size: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="profile">
+                <img id="avatar" class="avatar" src="https://github.com/ba138.png" alt="ba138">
+                <div class="profile-info">
+                    <h1 id="username">ba138</h1>
+                    <p id="bio">Loading bio...</p>
+                    <p id="location"><i class="fas fa-map-marker-alt"></i> <span>Loading location...</span></p>
+                </div>
+            </div>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i> Dark Mode
+            </button>
+        </header>
+
+        <div class="freelance-links">
+            <a href="https://www.fiverr.com/" class="freelance-link fiverr" target="_blank">
+                <i class="fab fa-fiverr"></i> Fiverr Profile
+            </a>
+            <a href="https://www.upwork.com/" class="freelance-link upwork" target="_blank">
+                <i class="fab fa-upwork"></i> Upwork Profile
+            </a>
+        </div>
+
+        <h2 class="section-title">GitHub Statistics</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Public Repositories</h3>
+                <div class="value" id="publicRepos">0</div>
+                <p class="description">Total repositories created</p>
+            </div>
+            <div class="stat-card">
+                <h3>Followers</h3>
+                <div class="value" id="followers">0</div>
+                <p class="description">Developers following your work</p>
+            </div>
+            <div class="stat-card">
+                <h3>Following</h3>
+                <div class="value" id="following">0</div>
+                <p class="description">Developers you're following</p>
+            </div>
+            <div class="stat-card">
+                <h3>Account Age</h3>
+                <div class="value" id="accountAge">0 days</div>
+                <p class="description">Since you joined GitHub</p>
+            </div>
+        </div>
+
+        <div class="chart-row">
+            <div class="chart-container">
+                <h2>Language Distribution</h2>
+                <canvas id="languageChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h2>Repository Size Distribution</h2>
+                <canvas id="sizeChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h2>Commit Activity</h2>
+            <canvas id="commitChart"></canvas>
+        </div>
+
+        <h2 class="section-title">Contribution Streak</h2>
+        <div class="streak-container">
+            <div class="streak-card">
+                <div class="streak-info">
+                    <div>
+                        <div class="streak-count" id="currentStreak">0 days</div>
+                        <div class="streak-details">Current streak</div>
+                    </div>
+                    <div>
+                        <div class="streak-count" id="longestStreak">0 days</div>
+                        <div class="streak-details">Longest streak</div>
+                    </div>
+                </div>
+                <div class="calendar" id="contributionCalendar">
+                    <!-- Contribution calendar will be generated here -->
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Top Skills</h2>
+        <div class="skills-container">
+            <div class="skills-grid" id="skillsGrid">
+                <!-- Skills will be populated here -->
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Featured Repositories</h2>
+        <div class="repos-grid" id="reposGrid">
+            <!-- Repositories will be populated here -->
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© <span id="currentYear"></span> ba138 | GitHub Portfolio</p>
+            <p>Last updated: <span id="lastUpdated"></span></p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Set last updated date
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString('en-US', options);
+            
+            // Theme toggle functionality
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('light-theme');
+                if (document.body.classList.contains('light-theme')) {
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+                } else {
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+                }
+            });
+            
+            // Fetch GitHub data
+            fetchGitHubData();
+        });
+
+        async function fetchGitHubData() {
+            try {
+                // Fetch user data
+                const userResponse = await axios.get('https://api.github.com/users/ba138');
+                const userData = userResponse.data;
+                
+                // Update profile info
+                document.getElementById('username').textContent = userData.name || userData.login;
+                document.getElementById('bio').textContent = userData.bio || 'No bio available';
+                document.getElementById('location').querySelector('span').textContent = userData.location || 'Location not specified';
+                
+                // Update stats
+                document.getElementById('publicRepos').textContent = userData.public_repos;
+                document.getElementById('followers').textContent = userData.followers;
+                document.getElementById('following').textContent = userData.following;
+                
+                // Calculate account age
+                const createdAt = new Date(userData.created_at);
+                const today = new Date();
+                const accountAgeDays = Math.floor((today - createdAt) / (1000 * 60 * 60 * 24));
+                document.getElementById('accountAge').textContent = `${accountAgeDays} days`;
+                
+                // Fetch repositories
+                const reposResponse = await axios.get('https://api.github.com/users/ba138/repos?per_page=100');
+                const reposData = reposResponse.data;
+                
+                // Process repositories data
+                processReposData(reposData);
+                
+                // Fetch contribution data (using GitHub API or alternative)
+                // Note: GitHub's official API doesn't provide contribution data directly
+                // We'll simulate this with random data for the demo
+                simulateContributionData();
+                
+            } catch (error) {
+                console.error('Error fetching GitHub data:', error);
+                // Fallback data or error handling
+                document.getElementById('bio').textContent = 'Failed to load GitHub data';
+            }
+        }
+
+        function processReposData(repos) {
+            // Filter out forks if needed
+            const ownedRepos = repos.filter(repo => !repo.fork);
+            
+            // Sort by stars or update date
+            const sortedRepos = [...ownedRepos].sort((a, b) => b.stargazers_count - a.stargazers_count);
+            
+            // Display top 6 repositories
+            displayFeaturedRepos(sortedRepos.slice(0, 6));
+            
+            // Analyze languages
+            analyzeLanguages(ownedRepos);
+            
+            // Analyze repository sizes
+            analyzeRepoSize(ownedRepos);
+        }
+
+        function displayFeaturedRepos(repos) {
+            const reposGrid = document.getElementById('reposGrid');
+            reposGrid.innerHTML = '';
+            
+            repos.forEach(repo => {
+                const repoCard = document.createElement('div');
+                repoCard.className = 'repo-card';
+                
+                // Format updated date
+                const updatedDate = new Date(repo.updated_at);
+                const formattedDate = updatedDate.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric' 
+                });
+                
+                // Create topics list
+                let topicsHTML = '';
+                if (repo.topics && repo.topics.length > 0) {
+                    topicsHTML = repo.topics.map(topic => 
+                        `<span class="topic">${topic}</span>`
+                    ).join('');
+                }
+                
+                repoCard.innerHTML = `
+                    <h3>${repo.name}</h3>
+                    <p>${repo.description || 'No description provided'}</p>
+                    ${topicsHTML ? `<div class="repo-topics">${topicsHTML}</div>` : ''}
+                    <div class="repo-meta">
+                        <span><i class="fas fa-star"></i> ${repo.stargazers_count}</span>
+                        <span><i class="fas fa-code-branch"></i> ${repo.forks_count}</span>
+                        <span><i class="fas fa-eye"></i> ${repo.watchers_count}</span>
+                        <span><i class="fas fa-calendar-alt"></i> ${formattedDate}</span>
+                    </div>
+                    <a href="${repo.html_url}" class="repo-link" target="_blank">View Repository</a>
+                `;
+                
+                reposGrid.appendChild(repoCard);
+            });
+        }
+
+        function analyzeLanguages(repos) {
+            const languageMap = {};
+            
+            repos.forEach(repo => {
+                if (repo.language) {
+                    languageMap[repo.language] = (languageMap[repo.language] || 0) + 1;
+                }
+            });
+            
+            // Sort languages by frequency
+            const sortedLanguages = Object.entries(languageMap)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 8);
+            
+            // Prepare data for chart
+            const labels = sortedLanguages.map(item => item[0]);
+            const data = sortedLanguages.map(item => item[1]);
+            
+            // Create chart
+            createLanguageChart(labels, data);
+            
+            // Also populate skills grid
+            populateSkillsGrid(sortedLanguages);
+        }
+
+        function analyzeRepoSize(repos) {
+            // Categorize repos by size
+            const sizeCategories = {
+                'Tiny (<100 KB)': 0,
+                'Small (100 KB - 1 MB)': 0,
+                'Medium (1 MB - 10 MB)': 0,
+                'Large (10 MB - 100 MB)': 0,
+                'Huge (>100 MB)': 0
+            };
+            
+            repos.forEach(repo => {
+                const sizeKB = repo.size; // size in KB
+                
+                if (sizeKB < 100) {
+                    sizeCategories['Tiny (<100 KB)']++;
+                } else if (sizeKB < 1000) {
+                    sizeCategories['Small (100 KB - 1 MB)']++;
+                } else if (sizeKB < 10000) {
+                    sizeCategories['Medium (1 MB - 10 MB)']++;
+                } else if (sizeKB < 100000) {
+                    sizeCategories['Large (10 MB - 100 MB)']++;
+                } else {
+                    sizeCategories['Huge (>100 MB)']++;
+                }
+            });
+            
+            // Prepare data for chart
+            const labels = Object.keys(sizeCategories);
+            const data = Object.values(sizeCategories);
+            
+            // Create chart
+            createSizeChart(labels, data);
+        }
+
+        function createLanguageChart(labels, data) {
+            const ctx = document.getElementById('languageChart').getContext('2d');
+            
+            // Generate colors
+            const colors = generateColors(labels.length);
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors,
+                        borderColor: '#121212',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: '#f0f0f0'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+
+        function createSizeChart(labels, data) {
+            const ctx = document.getElementById('sizeChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Number of Repositories',
+                        data: data,
+                        backgroundColor: 'rgba(110, 64, 201, 0.7)',
+                        borderColor: 'rgba(110, 64, 201, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#f0f0f0'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#f0f0f0'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.parsed.y} repositories`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createCommitChart(labels, data) {
+            const ctx = document.getElementById('commitChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Commits',
+                        data: data,
+                        backgroundColor: 'rgba(110, 64, 201, 0.2)',
+                        borderColor: 'rgba(110, 64, 201, 1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#f0f0f0'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#f0f0f0'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#f0f0f0'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function populateSkillsGrid(languages) {
+            const skillsGrid = document.getElementById('skillsGrid');
+            skillsGrid.innerHTML = '';
+            
+            // Calculate total for percentages
+            const total = languages.reduce((sum, lang) => sum + lang[1], 0);
+            
+            languages.forEach(lang => {
+                const skillItem = document.createElement('div');
+                skillItem.className = 'skill-item';
+                
+                const percentage = Math.round((lang[1] / total) * 100);
+                
+                skillItem.innerHTML = `
+                    <div class="skill-header">
+                        <span class="skill-name">${lang[0]}</span>
+                        <span class="skill-percent">${percentage}%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: ${percentage}%"></div>
+                    </div>
+                `;
+                
+                skillsGrid.appendChild(skillItem);
+            });
+        }
+
+        function simulateContributionData() {
+            // Simulate contribution data (in a real app, you'd fetch this from GitHub's API)
+            
+            // Current and longest streak
+            document.getElementById('currentStreak').textContent = '12 days';
+            document.getElementById('longestStreak').textContent = '45 days';
+            
+            // Generate random contribution calendar
+            generateContributionCalendar();
+            
+            // Generate commit activity chart
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const commitData = months.map(() => Math.floor(Math.random() * 30) + 5);
+            createCommitChart(months, commitData);
+        }
+
+        function generateContributionCalendar() {
+            const calendar = document.getElementById('contributionCalendar');
+            calendar.innerHTML = '';
+            
+            // Generate 365 days of random contribution data
+            const today = new Date();
+            const oneYearAgo = new Date(today);
+            oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+            
+            // Create a tooltip with date and count
+            const createTooltip = (date, count) => {
+                const tooltip = document.createElement('div');
+                tooltip.className = 'day-tooltip';
+                tooltip.textContent = `${date.toLocaleDateString()}: ${count} contribution${count !== 1 ? 's' : ''}`;
+                return tooltip;
+            };
+            
+            // Generate each day
+            for (let d = new Date(oneYearAgo); d <= today; d.setDate(d.getDate() + 1)) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'day';
+                
+                // Random contribution level (0-4)
+                const level = Math.floor(Math.random() * 5);
+                if (level > 0) {
+                    dayElement.setAttribute('data-level', level);
+                }
+                
+                // Random contribution count for tooltip
+                const count = level === 0 ? 0 : Math.floor(Math.random() * 10) + 1;
+                
+                // Add tooltip
+                dayElement.appendChild(createTooltip(new Date(d), count));
+                
+                calendar.appendChild(dayElement);
+            }
+        }
+
+        function generateColors(count) {
+            const colors = [];
+            const hueStep = 360 / count;
+            
+            for (let i = 0; i < count; i++) {
+                const hue = i * hueStep;
+                colors.push(`hsla(${hue}, 70%, 60%, 0.7)`);
+            }
+            
+            return colors;
+        }
+    </script>
+</body>
+</html>

@@ -3,240 +3,1567 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basit Ali - Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>ba138 | GitHub Portfolio</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ===== GLOBAL STYLES ===== */
         :root {
-            --primary: #40C4FF;  /* Flutter teal */
-            --secondary: #BB86FC; /* AI purple */
-            --accent: #FFD700;   /* Gold */
-            --text-light: #F8F9FA;
-            --text-muted: #ADB5BD;
-            --bg-dark: #121212;
+            --primary: #0f0f1a;
+            --secondary: #1a1a2e;
+            --accent: #4a148c;
+            --highlight: #7b1fa2;
+            --text: #f5f5f5;
+            --text-secondary: #b0b0b0;
+            --gradient-start: #8e24aa;
+            --gradient-end: #3949ab;
+            --card-bg: rgba(26, 26, 46, 0.8);
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #000;
-            color: var(--text-light);
-            overflow-x: hidden;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--text);
             line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* ===== SECTION 1 WITH CUBE ===== */
-        .section1 {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 0 5%;
-            position: relative;
-            overflow: hidden;
+        /* Animated background elements */
+        .particle {
+            position: fixed;
+            border-radius: 50%;
+            background: rgba(123, 31, 162, 0.3);
+            z-index: -1;
+            animation: float 15s infinite linear;
         }
 
-        /* ===== 3D CUBE STYLES ===== */
-        .cube-container {
-            width: 180px;
-            height: 180px;
-            position: relative;
-            margin-bottom: 60px;
-            transform-style: preserve-3d;
-            animation: rotateCube 12s infinite ease-in-out;
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(100vw, 100vh) rotate(360deg); }
         }
 
-        @media (min-width: 768px) {
-            .cube-container {
-                width: 220px;
-                height: 220px;
-                margin-bottom: 80px;
-            }
-        }
-
-        .cube-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: rgba(64, 196, 255, 0.15);
-            border: 1px solid rgba(187, 134, 252, 0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            box-shadow: 0 0 25px rgba(187, 134, 252, 0.4);
-        }
-
-        .cube-face img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .cube-face:hover img {
-            transform: scale(1.1);
-        }
-
-        /* Cube face positions */
-        .front { transform: translateZ(90px); }
-        .back { transform: rotateY(180deg) translateZ(90px); }
-        .right { transform: rotateY(90deg) translateZ(90px); }
-        .left { transform: rotateY(-90deg) translateZ(90px); }
-        .top { transform: rotateX(90deg) translateZ(90px); }
-        .bottom { transform: rotateX(-90deg) translateZ(90px); }
-
-        @media (min-width: 768px) {
-            .front { transform: translateZ(110px); }
-            .back { transform: rotateY(180deg) translateZ(110px); }
-            .right { transform: rotateY(90deg) translateZ(110px); }
-            .left { transform: rotateY(-90deg) translateZ(110px); }
-            .top { transform: rotateX(90deg) translateZ(110px); }
-            .bottom { transform: rotateX(-90deg) translateZ(110px); }
-        }
-
-        /* Cube animation from your cube code */
-        @keyframes rotateCube {
-            0% { transform: rotateY(0) rotateX(0); }
-            33% { transform: rotateY(360deg) rotateX(0); }
-            66% { transform: rotateY(360deg) rotateX(180deg); }
-            100% { transform: rotateY(0) rotateX(0); }
-        }
-
-        /* ===== CENTERED TEXT ===== */
-        .hero-text-container {
-            text-align: center;
-            max-width: 800px;
+        .container {
+            max-width: 1400px;
             margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
         }
 
-        .hero-text {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            opacity: 0;
-            transform: translateY(20px);
+        /* Header styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        header::after {
+            content: '';
             position: absolute;
+            bottom: 0;
+            left: 0;
             width: 100%;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            line-height: 1.3;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--highlight), transparent);
+            opacity: 0.5;
         }
 
-        @media (min-width: 768px) {
-            .hero-text {
-                font-size: 3rem;
-            }
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
         }
 
-        .hero-text.active {
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--highlight);
+            object-fit: cover;
+            box-shadow: 0 0 30px rgba(123, 31, 162, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(123, 31, 162, 0.7);
+        }
+
+        .profile-info h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, var(--highlight), var(--gradient-end));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+
+        .profile-info p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.2rem;
+        }
+
+        .social-links a {
+            color: var(--text);
+            font-size: 1.8rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .social-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--highlight);
+            transition: width 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--highlight);
+            transform: translateY(-3px);
+        }
+
+        .social-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Stats section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin: 2.5rem 0;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(123, 31, 162, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-card:hover::before {
             opacity: 1;
-            transform: translateY(0);
         }
 
-        .hero-text span {
-            background: linear-gradient(90deg, var(--primary), var(--accent));
+        .stat-card h3 {
+            color: var(--highlight);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-card p {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--text), var(--text-secondary));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
 
-        /* Rest of your existing portfolio styles... */
+        /* Section titles */
+        .section-title {
+            font-size: 2rem;
+            margin: 3rem 0 1.5rem;
+            position: relative;
+            display: inline-block;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--highlight), transparent);
+            border-radius: 2px;
+        }
+
+        /* Repositories section */
+        .repos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .repo-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .repo-card:nth-child(1) { animation-delay: 0.1s; }
+        .repo-card:nth-child(2) { animation-delay: 0.2s; }
+        .repo-card:nth-child(3) { animation-delay: 0.3s; }
+        .repo-card:nth-child(4) { animation-delay: 0.4s; }
+        .repo-card:nth-child(5) { animation-delay: 0.5s; }
+        .repo-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .repo-card:hover {
+            transform: translateY(-8px) !important;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(123, 31, 162, 0.3);
+        }
+
+        .repo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .repo-header h3 {
+            color: var(--highlight);
+            font-size: 1.4rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 80%;
+        }
+
+        .repo-header a {
+            color: var(--text);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .repo-header a:hover {
+            color: var(--highlight);
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        .repo-desc {
+            flex-grow: 1;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .repo-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .repo-stats {
+            display: flex;
+            gap: 1.2rem;
+        }
+
+        .repo-stats span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .repo-stats span:hover {
+            color: var(--highlight);
+        }
+
+        .repo-stats i {
+            font-size: 1.1rem;
+        }
+
+        .repo-languages {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .language-tag {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .language-tag:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(123, 31, 162, 0.3);
+        }
+
+        /* Charts section */
+        .chart-container {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 3rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .chart-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+            animation: fadeInUp 0.6s forwards;
+        }
+
+        .chart-container:hover {
+            transform: translateY(-5px) !important;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .chart-container h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--highlight);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .chart-container h2 i {
+            font-size: 1.4rem;
+        }
+
+        /* Skills section */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .skill {
+            background: linear-gradient(45deg, var(--accent), var(--gradient-end));
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: scale(0.8);
+            border: 1px solid transparent;
+        }
+
+        .skill.visible {
+            opacity: 1;
+            transform: scale(1);
+            animation: popIn 0.4s forwards;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            70% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .skill:hover {
+            transform: scale(1.1) !important;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            border-color: var(--highlight);
+        }
+
+        /* Streak section */
+        .streak-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .streak-day {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            background: var(--accent);
+            transition: all 0.3s ease;
+        }
+
+        .streak-day.active {
+            background: var(--highlight);
+            box-shadow: 0 0 10px rgba(123, 31, 162, 0.5);
+        }
+
+        .streak-day:hover {
+            transform: scale(1.5);
+            z-index: 1;
+        }
+
+        /* AI Insights section */
+        .ai-insights {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 3rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .ai-insights.visible {
+            opacity: 1;
+            transform: translateY(0);
+            animation: fadeInUp 0.6s forwards;
+        }
+
+        .ai-insight-card {
+            background: rgba(26, 26, 46, 0.5);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--highlight);
+        }
+
+        .ai-insight-card h3 {
+            color: var(--highlight);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .ai-insight-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--highlight), transparent);
+        }
+
+        footer p {
+            font-size: 1rem;
+        }
+
+        /* Loading states */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(123, 31, 162, 0.2);
+            border-top: 6px solid var(--highlight);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Magic button */
+        .magic-button {
+            background: linear-gradient(45deg, var(--highlight), var(--gradient-end));
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(123, 31, 162, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin: 2rem auto;
+        }
+
+        .magic-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(123, 31, 162, 0.6);
+        }
+
+        .magic-button:active {
+            transform: translateY(1px);
+        }
+
+        /* Responsive design */
+        @media (max-width: 1200px) {
+            .repos {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 992px) {
+            header {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .profile {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+                margin: 2rem 0 1rem;
+            }
+
+            .chart-container {
+                padding: 1.5rem;
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .repos {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-info h1 {
+                font-size: 2rem;
+            }
+
+            .avatar {
+                width: 100px;
+                height: 100px;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Your existing navbar... -->
+    <!-- Animated background particles -->
+    <div class="particle" style="width: 300px; height: 300px; top: 10%; left: 5%; animation-duration: 25s;"></div>
+    <div class="particle" style="width: 200px; height: 200px; top: 60%; left: 70%; animation-duration: 30s;"></div>
+    <div class="particle" style="width: 150px; height: 150px; top: 30%; left: 80%; animation-duration: 20s;"></div>
 
-    <!-- ===== SECTION 1 WITH CUBE AND TEXT ===== -->
-    <section class="section1">
-        <!-- 3D Cube -->
-        <div class="cube-container">
-            <div class="cube-face front">
-                <img src="flutter.jpg" alt="Project 1">
+    <div class="container">
+        <header>
+            <div class="profile">
+                <img id="avatar" class="avatar" src="" alt="Profile Picture">
+                <div class="profile-info">
+                    <h1 id="username">ba138</h1>
+                    <p id="bio">Loading profile data...</p>
+                </div>
             </div>
-            <div class="cube-face back">
-                <img src="dart.jpg" alt="Project 2">
+            <div class="social-links">
+                <a href="https://github.com/ba138" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://www.fiverr.com/" target="_blank" title="Fiverr"><i class="fas fa-code"></i></a>
+                <a href="https://www.upwork.com/" target="_blank" title="Upwork"><i class="fas fa-laptop-code"></i></a>
+                <a href="#" id="twitter-link" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
             </div>
-            <div class="cube-face right">
-                <img src="flutter.jpg" alt="Project 3">
+        </header>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3><i class="fas fa-book"></i> Repositories</h3>
+                <p id="repo-count">0</p>
             </div>
-            <div class="cube-face left">
-                <img src="dart.jpg" alt="Project 4">
+            <div class="stat-card">
+                <h3><i class="fas fa-users"></i> Followers</h3>
+                <p id="followers">0</p>
             </div>
-            <div class="cube-face top">
-                <img src="flutter.jpg" alt="Project 5">
+            <div class="stat-card">
+                <h3><i class="fas fa-user-friends"></i> Following</h3>
+                <p id="following">0</p>
             </div>
-            <div class="cube-face bottom">
-                <img src="images/project6.jpg" alt="Project 6">
+            <div class="stat-card">
+                <h3><i class="fas fa-star"></i> Stars</h3>
+                <p id="stars">0</p>
             </div>
         </div>
 
-        <!-- Centered Text -->
-        <div class="hero-text-container">
-            <h1 class="hero-text" id="text1">Explore the world of <span>innovative</span> app development with Basit</h1>
-            <h1 class="hero-text" id="text2"><span>Cross-platform</span> magic using Flutter and Dart technology.</h1>
-            <h1 class="hero-text" id="text3">Build smart apps enhanced with <span>cutting-edge AI</span>.</h1>
-            <h1 class="hero-text" id="text4">Your dream app—<span>designed</span>, <span>developed</span>, and <span>delivered</span>.</h1>
+        <h2 class="section-title"><i class="fas fa-code-branch"></i> Top Repositories</h2>
+        <div class="repos" id="repos-container">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
         </div>
-    </section>
 
-    <!-- Rest of your portfolio content... -->
+        <h2 class="section-title"><i class="fas fa-chart-line"></i> Development Analytics</h2>
+        
+        <div class="chart-container" id="langChart-container">
+            <h2><i class="fas fa-code"></i> Language Distribution</h2>
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+            <canvas id="langChart"></canvas>
+        </div>
+
+        <div class="chart-container" id="sizeChart-container">
+            <h2><i class="fas fa-weight-hanging"></i> Repository Sizes</h2>
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+            <canvas id="sizeChart"></canvas>
+        </div>
+
+        <div class="chart-container" id="commitChart-container">
+            <h2><i class="fas fa-calendar-alt"></i> Commit Activity</h2>
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+            <canvas id="commitChart"></canvas>
+        </div>
+
+        <div class="chart-container" id="starChart-container">
+            <h2><i class="fas fa-star"></i> Star History</h2>
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+            <canvas id="starChart"></canvas>
+        </div>
+
+        <h2 class="section-title"><i class="fas fa-laptop-code"></i> Skills</h2>
+        <div class="skills-container" id="skills-container">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <h2 class="section-title"><i class="fas fa-fire"></i> Contribution Streak</h2>
+        <div class="chart-container">
+            <h2><i class="fas fa-calendar-check"></i> Last Year Activity</h2>
+            <div id="streak-container" class="streak-container">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+            <div id="streak-stats" style="margin-top: 20px; font-size: 1.1rem;"></div>
+        </div>
+
+        <button class="magic-button" id="ai-magic-button">
+            <i class="fas fa-magic"></i> Generate AI Insights
+        </button>
+
+        <div class="ai-insights" id="ai-insights">
+            <h2 class="section-title"><i class="fas fa-robot"></i> DeepSeek AI Insights</h2>
+            <div id="ai-insights-content">
+                <!-- AI insights will be inserted here -->
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; <span id="current-year"></span> ba138 | Powered by GitHub API & DeepSeek AI</p>
+        </footer>
+    </div>
 
     <script>
-        // ===== TEXT ANIMATION =====
-        const texts = [
-            "Explore the world of innovative app development with Basit",
-            "Cross-platform magic using Flutter and Dart technology.",
-            "Build smart apps enhanced with cutting-edge AI.",
-            "Your dream app—designed, developed, and delivered."
-        ];
-        
-        const textElements = [
-            document.getElementById('text1'),
-            document.getElementById('text2'),
-            document.getElementById('text3'),
-            document.getElementById('text4')
-        ];
-        
-        let currentIndex = 0;
-        
-        function animateText() {
-            // Hide all texts
-            textElements.forEach(el => {
-                el.classList.remove('active');
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(20px)';
-            });
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year
+            document.getElementById('current-year').textContent = new Date().getFullYear();
             
-            // Show current text with animation
-            textElements[currentIndex].classList.add('active');
-            textElements[currentIndex].style.opacity = '1';
-            textElements[currentIndex].style.transform = 'translateY(0)';
+            const username = 'ba138';
+            const apiUrl = `https://api.github.com/users/${username}`;
+            const reposUrl = `https://api.github.com/users/${username}/repos?per_page=100&sort=updated`;
+            const eventsUrl = `https://api.github.com/users/${username}/events/public`;
+            const starredUrl = `https://api.github.com/users/${username}/starred?per_page=100`;
             
-            // Move to next text
-            currentIndex = (currentIndex + 1) % textElements.length;
-            
-            // Repeat every 5 seconds (3s visible + 2s transition)
-            setTimeout(animateText, 5000);
-        }
-        
-        // Start animation
-        setTimeout(animateText, 500);
+            // Intersection Observer for animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        if (entry.target.classList.contains('skill')) {
+                            entry.target.style.animationDelay = `${document.querySelectorAll('.skill.visible').length * 0.1}s`;
+                        }
+                    }
+                });
+            }, { threshold: 0.1 });
 
-        // ===== CUBE IMAGE HOVER EFFECTS =====
-        document.querySelectorAll('.cube-face img').forEach(img => {
-            img.addEventListener('mouseenter', () => {
-                img.style.transform = 'scale(1.1)';
+            document.querySelectorAll('.chart-container, .skill, .ai-insights').forEach(el => {
+                observer.observe(el);
             });
+
+            // Fetch user data
+            axios.get(apiUrl)
+                .then(response => {
+                    const user = response.data;
+                    document.getElementById('username').textContent = user.name || user.login;
+                    document.getElementById('bio').textContent = user.bio || 'Passionate developer building amazing things';
+                    document.getElementById('avatar').src = user.avatar_url;
+                    document.getElementById('repo-count').textContent = user.public_repos;
+                    document.getElementById('followers').textContent = user.followers;
+                    document.getElementById('following').textContent = user.following;
+                    
+                    if(user.twitter_username) {
+                        document.getElementById('twitter-link').href = `https://twitter.com/${user.twitter_username}`;
+                    } else {
+                        document.getElementById('twitter-link').style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching user data:', error);
+                    document.getElementById('bio').textContent = 'GitHub enthusiast | Open source contributor';
+                });
             
-            img.addEventListener('mouseleave', () => {
-                img.style.transform = 'scale(1)';
+            // Fetch repositories and process data
+            axios.get(reposUrl)
+                .then(response => {
+                    const repos = response.data;
+                    document.getElementById('repo-count').textContent = repos.length;
+                    
+                    // Calculate stars
+                    const stars = repos.reduce((acc, repo) => acc + repo.stargazers_count, 0);
+                    document.getElementById('stars').textContent = stars;
+                    
+                    // Process languages
+                    const languagePromises = repos.map(repo => 
+                        axios.get(repo.languages_url)
+                            .then(langResponse => {
+                                return {
+                                    name: repo.name,
+                                    languages: langResponse.data,
+                                    size: repo.size,
+                                    stars: repo.stargazers_count,
+                                    forks: repo.forks_count,
+                                    description: repo.description,
+                                    html_url: repo.html_url,
+                                    updated_at: new Date(repo.updated_at),
+                                    language: repo.language,
+                                    created_at: new Date(repo.created_at)
+                                };
+                            })
+                            .catch(() => {
+                                return {
+                                    name: repo.name,
+                                    languages: {},
+                                    size: repo.size,
+                                    stars: repo.stargazers_count,
+                                    forks: repo.forks_count,
+                                    description: repo.description,
+                                    html_url: repo.html_url,
+                                    updated_at: new Date(repo.updated_at),
+                                    language: repo.language,
+                                    created_at: new Date(repo.created_at)
+                                };
+                            })
+                    );
+                    
+                    return Promise.all(languagePromises);
+                })
+                .then(reposWithLanguages => {
+                    // Filter out forks and empty repos
+                    const validRepos = reposWithLanguages
+                        .filter(repo => Object.keys(repo.languages).length > 0 || repo.stars > 0)
+                        .sort((a, b) => b.stars - a.stars || b.updated_at - a.updated_at);
+                    
+                    // Display repositories first for better UX
+                    displayRepositories(validRepos.slice(0, 6));
+                    
+                    // Process language data for chart
+                    const languageData = {};
+                    validRepos.forEach(repo => {
+                        for (const [lang, bytes] of Object.entries(repo.languages)) {
+                            if (languageData[lang]) {
+                                languageData[lang] += bytes;
+                            } else {
+                                languageData[lang] = bytes;
+                            }
+                        }
+                    });
+                    
+                    // Sort languages by size
+                    const sortedLanguages = Object.entries(languageData)
+                        .sort((a, b) => b[1] - a[1])
+                        .slice(0, 8); // Top 8 languages
+                    
+                    // Create language chart
+                    createLanguageChart(sortedLanguages);
+                    
+                    // Create repo size chart
+                    createSizeChart(validRepos);
+                    
+                    // Create skills list
+                    createSkillsList(sortedLanguages);
+                    
+                    return validRepos;
+                })
+                .then(validRepos => {
+                    // Fetch events for commit activity
+                    return axios.get(eventsUrl)
+                        .then(response => {
+                            const events = response.data;
+                            const pushEvents = events.filter(event => event.type === 'PushEvent');
+                            
+                            // Process commit activity
+                            processCommitActivity(pushEvents);
+                            
+                            // Create streak visualization
+                            createStreakVisualization(pushEvents);
+                            
+                            return { validRepos, pushEvents };
+                        })
+                        .catch(error => {
+                            console.error('Error fetching events:', error);
+                            // Create empty streak visualization
+                            createStreakVisualization([]);
+                        });
+                })
+                .then(({ validRepos }) => {
+                    // Fetch starred repos for star history
+                    return axios.get(starredUrl)
+                        .then(response => {
+                            const starredRepos = response.data;
+                            createStarHistoryChart(validRepos, starredRepos);
+                        })
+                        .catch(error => {
+                            console.error('Error fetching starred repos:', error);
+                            document.getElementById('starChart-container').querySelector('.loading').innerHTML = 
+                                '<p>Could not load star history</p>';
+                        });
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    handleDataErrors();
+                });
+            
+            // AI Magic Button
+            document.getElementById('ai-magic-button').addEventListener('click', function() {
+                generateAIInsights();
+                this.disabled = true;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating Insights...';
             });
+
+            // Helper functions
+            function displayRepositories(repos) {
+                const reposContainer = document.getElementById('repos-container');
+                reposContainer.innerHTML = '';
+                
+                if (repos.length === 0) {
+                    reposContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No repositories found</p>';
+                    return;
+                }
+                
+                repos.forEach((repo, index) => {
+                    const repoCard = document.createElement('div');
+                    repoCard.className = 'repo-card';
+                    repoCard.style.animationDelay = `${index * 0.1}s`;
+                    
+                    const topLanguages = Object.entries(repo.languages)
+                        .sort((a, b) => b[1] - a[1])
+                        .slice(0, 3)
+                        .map(item => item[0]);
+                    
+                    repoCard.innerHTML = `
+                        <div class="repo-header">
+                            <h3>${repo.name}</h3>
+                            <a href="${repo.html_url}" target="_blank" title="View on GitHub"><i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                        <p class="repo-desc">${repo.description || 'No description provided'}</p>
+                        ${topLanguages.length > 0 ? 
+                            `<div class="repo-languages">
+                                ${topLanguages.map(lang => 
+                                    `<span class="language-tag" style="color: ${getLanguageColor(lang)}; border-color: ${getLanguageColor(lang)}">
+                                        ${lang}
+                                    </span>`
+                                ).join('')}
+                            </div>` : ''
+                        }
+                        <div class="repo-footer">
+                            <div class="repo-stats">
+                                <span title="Stars"><i class="fas fa-star"></i> ${repo.stars}</span>
+                                <span title="Forks"><i class="fas fa-code-branch"></i> ${repo.forks}</span>
+                                <span title="Size"><i class="fas fa-hdd"></i> ${formatSize(repo.size)}</span>
+                            </div>
+                            <div title="Last updated">${timeAgo(repo.updated_at)}</div>
+                        </div>
+                    `;
+                    
+                    reposContainer.appendChild(repoCard);
+                });
+            }
+            
+            function createLanguageChart(languageData) {
+                const langCtx = document.getElementById('langChart').getContext('2d');
+                const langChartContainer = document.getElementById('langChart-container');
+                
+                // Remove loading spinner
+                langChartContainer.querySelector('.loading').style.display = 'none';
+                
+                // Prepare data for chart
+                const labels = languageData.map(item => item[0]);
+                const data = languageData.map(item => item[1]);
+                const backgroundColors = [
+                    '#8e24aa', '#3949ab', '#1e88e5', '#039be5',
+                    '#00acc1', '#00897b', '#43a047', '#7cb342'
+                ];
+                
+                new Chart(langCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: backgroundColors,
+                            borderWidth: 0,
+                            hoverOffset: 20
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: {
+                                    color: '#f1f1f1',
+                                    font: {
+                                        size: 14,
+                                        family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                                    },
+                                    padding: 20,
+                                    usePointStyle: true,
+                                    pointStyle: 'circle'
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(26, 26, 46, 0.9)',
+                                titleColor: '#8e24aa',
+                                bodyColor: '#f1f1f1',
+                                borderColor: 'rgba(255, 255, 255, 0.1)',
+                                borderWidth: 1,
+                                padding: 12,
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.raw || 0;
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = Math.round((value / total) * 100);
+                                        return `${label}: ${formatSize(value)} (${percentage}%)`;
+                                    }
+                                }
+                            }
+                        },
+                        cutout: '65%',
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true
+                        }
+                    }
+                });
+                
+                // Show chart container with animation
+                langChartContainer.classList.add('visible');
+            }
+            
+            function createSizeChart(repos) {
+                const sizeCtx = document.getElementById('sizeChart').getContext('2d');
+                const sizeChartContainer = document.getElementById('sizeChart-container');
+                
+                // Remove loading spinner
+                sizeChartContainer.querySelector('.loading').style.display = 'none';
+                
+                // Get top 10 repos by size
+                const sortedBySize = [...repos]
+                    .sort((a, b) => b.size - a.size)
+                    .slice(0, 10)
+                    .filter(repo => repo.size > 0);
+                
+                // Prepare data
+                const repoNames = sortedBySize.map(repo => repo.name.length > 15 ? 
+                    repo.name.substring(0, 15) + '...' : repo.name);
+                const repoColors = sortedBySize.map((_, i) => 
+                    `hsl(${(i * 360 / sortedBySize.length)}, 70%, 60%)`);
+                
+                new Chart(sizeCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: repoNames,
+                        datasets: [{
+                            label: 'Size (KB)',
+                            data: sortedBySize.map(repo => repo.size),
+                            backgroundColor: repoColors,
+                            borderWidth: 0,
+                            borderRadius: 6,
+                            borderSkipped: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(26, 26, 46, 0.9)',
+                                titleColor: '#8e24aa',
+                                bodyColor: '#f1f1f1',
+                                borderColor: 'rgba(255, 255, 255, 0.1)',
+                                borderWidth: 1,
+                                padding: 12,
+                                callbacks: {
+                                    label: function(context) {
+                                        return `Size: ${formatSize(context.raw)}`;
+                                    },
+                                    afterLabel: function(context) {
+                                        const repo = sortedBySize[context.dataIndex];
+                                        return `Stars: ${repo.stars}\nForks: ${repo.forks}`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)',
+                                    drawBorder: false
+                                },
+                                ticks: {
+                                    color: '#b0b0b0',
+                                    callback: function(value) {
+                                        return formatSize(value);
+                                    }
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false,
+                                    drawBorder: false
+                                },
+                                ticks: {
+                                    color: '#b0b0b0'
+                                }
+                            }
+                        },
+                        animation: {
+                            delay: function(context) {
+                                return context.dataIndex * 100;
+                            }
+                        }
+                    }
+                });
+                
+                // Show chart container with animation
+                sizeChartContainer.classList.add('visible');
+            }
+            
+            function createSkillsList(languageData) {
+                const skillsContainer = document.getElementById('skills-container');
+                skillsContainer.innerHTML = '';
+                
+                languageData.forEach(([lang], index) => {
+                    const skill = document.createElement('div');
+                    skill.className = 'skill';
+                    skill.textContent = lang;
+                    skill.style.animationDelay = `${index * 0.1}s`;
+                    skill.style.border = `1px solid ${getLanguageColor(lang)}`;
+                    skillsContainer.appendChild(skill);
+                    
+                    // Trigger animation
+                    setTimeout(() => {
+                        skill.classList.add('visible');
+                    }, 50);
+                });
+                
+                // Add "Git" as a skill
+                const gitSkill = document.createElement('div');
+                gitSkill.className = 'skill';
+                gitSkill.textContent = 'Git';
+                gitSkill.style.animationDelay = `${languageData.length * 0.1}s`;
+                gitSkill.style.border = '1px solid #f14e32';
+                skillsContainer.appendChild(gitSkill);
+                
+                setTimeout(() => {
+                    gitSkill.classList.add('visible');
+                }, 50);
+            }
+            
+            function processCommitActivity(pushEvents) {
+                const commitCtx = document.getElementById('commitChart').getContext('2d');
+                const commitChartContainer = document.getElementById('commitChart-container');
+                
+                // Remove loading spinner
+                commitChartContainer.querySelector('.loading').style.display = 'none';
+                
+                // Group by week for better visualization
+                const weeklyActivity = {};
+                pushEvents.forEach(event => {
+                    const date = new Date(event.created_at);
+                    const week = `${date.getFullYear()}-W${Math.floor(date.getDate() / 7) + 1}`;
+                    
+                    if (weeklyActivity[week]) {
+                        weeklyActivity[week] += event.payload.commits.length;
+                    } else {
+                        weeklyActivity[week] = event.payload.commits.length;
+                    }
+                });
+                
+                // Sort by date and get last 20 weeks
+                const sortedWeeks = Object.keys(weeklyActivity)
+                    .sort()
+                    .slice(-20);
+                
+                // Create chart
+                new Chart(commitCtx, {
+                    type: 'line',
+                    data: {
+                        labels: sortedWeeks,
+                        datasets: [{
+                            label: 'Commits',
+                            data: sortedWeeks.map(week => weeklyActivity[week]),
+                            borderColor: '#8e24aa',
+                            backgroundColor: 'rgba(142, 36, 170, 0.2)',
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#8e24aa',
+                            pointRadius: 5,
+                            pointHoverRadius: 8,
+                            pointBorderWidth: 2,
+                            pointBorderColor: '#1a1a2e'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#f1f1f1',
+                                    font: {
+                                        size: 14,
+                                        family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(26, 26, 46, 0.9)',
+                                titleColor: '#8e24aa',
+                                bodyColor: '#f1f1f1',
+                                borderColor: 'rgba(255, 255, 255, 0.1)',
+                                borderWidth: 1,
+                                padding: 12
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)',
+                                    drawBorder: false
+                                },
+                                ticks: {
+                                    color: '#b0b0b0'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false,
+                                    drawBorder: false
+                                },
+                                ticks: {
+                                    color: '#b0b0b0'
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // Show chart container with animation
+                commitChartContainer.classList.add('visible');
+            }
+            
+            function createStreakVisualization(pushEvents) {
+                const streakContainer = document.getElementById('streak-container');
+                const streakStats = document.getElementById('streak-stats');
+                streakContainer.innerHTML = '';
+                
+                // Create a year's worth of days
+                const today = new Date();
+                const oneYearAgo = new Date();
+                oneYearAgo.setFullYear(today.getFullYear() - 1);
+                
+                // Count commits per day
+                const commitDays = {};
+                pushEvents.forEach(event => {
+                    const date = new Date(event.created_at).toDateString();
+                    commitDays[date] = (commitDays[date] || 0) + event.payload.commits.length;
+                });
+                
+                // Calculate streak stats
+                let currentStreak = 0;
+                let maxStreak = 0;
+                let totalCommits = 0;
+                let commitDaysCount = 0;
+                
+                // Generate streak visualization
+                for (let d = new Date(oneYearAgo); d <= today; d.setDate(d.getDate() + 1)) {
+                    const day = document.createElement('div');
+                    day.className = 'streak-day';
+                    day.title = d.toDateString();
+                    
+                    const dateStr = d.toDateString();
+                    if (commitDays[dateStr]) {
+                        day.classList.add('active');
+                        currentStreak++;
+                        maxStreak = Math.max(maxStreak, currentStreak);
+                        totalCommits += commitDays[dateStr];
+                        commitDaysCount++;
+                    } else {
+                        currentStreak = 0;
+                    }
+                    
+                    streakContainer.appendChild(day);
+                }
+                
+                // Display streak stats
+                streakStats.innerHTML = `
+                    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1rem;">
+                        <div><strong>Total Commits:</strong> ${totalCommits}</div>
+                        <div><strong>Active Days:</strong> ${commitDaysCount}</div>
+                        <div><strong>Longest Streak:</strong> ${maxStreak} days</div>
+                    </div>
+                `;
+            }
+            
+            function createStarHistoryChart(repos, starredRepos) {
+                const starCtx = document.getElementById('starChart').getContext('2d');
+                const starChartContainer = document.getElementById('starChart-container');
+                
+                // Remove loading spinner
+                starChartContainer.querySelector('.loading').style.display = 'none';
+                
+                // Process star data
+                const starData = {};
+                starredRepos.forEach(repo => {
+                    const date = new Date(repo.created_at).toISOString().split('T')[0];
+                    starData[date] = (starData[date] || 0) + 1;
+                });
+                
+                // Process own repo stars
+                const ownStarData = {};
+                repos.forEach(repo => {
+                    if (repo.stars > 0) {
+                        const date = repo.created_at.toISOString().split('T')[0];
+                        ownStarData[date] = (ownStarData[date] || 0) + repo.stars;
+                    }
+                });
+                
+                // Get sorted unique dates
+                const allDates = [...new Set([...Object.keys(starData), ...Object.keys(ownStarData)])].sort();
+                
+                // Create cumulative sums
+                let starredSum = 0;
+                let ownStarsSum = 0;
+                const starredCumulative = [];
+                const ownStarsCumulative = [];
+                
+                allDates.forEach(date => {
+                    starredSum += starData[date] || 0;
+                    ownStarsSum += ownStarData[date] || 0;
+                    starredCumulative.push(starredSum);
+                    ownStarsCumulative.push(ownStarsSum);
+                });
+                
+                // Create chart
+                new Chart(starCtx, {
+                    type: 'line',
+                    data: {
+                        labels: allDates,
+                        datasets: [
+                            {
+                                label: 'Stars Given',
+                                data: starredCumulative,
+                                borderColor: '#8e24aa',
+                                backgroundColor: 'rgba(142, 36, 170, 0.2)',
+                                fill: true,
+                                tension: 0.4
+                            },
+                            {
+                                label: 'Stars Received',
+                                data: ownStarsCumulative,
+                                borderColor: '#3949ab',
+                                backgroundColor: 'rgba(57, 73, 171, 0.2)',
+                                fill: true,
+                                tension: 0.4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#f1f1f1',
+                                    font: {
+                                        size: 14,
+                                        family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(26, 26, 46, 0.9)',
+                                titleColor: '#8e24aa',
+                                bodyColor: '#f1f1f1',
+                                borderColor: 'rgba(255, 255, 255, 0.1)',
+                                borderWidth: 1,
+                                padding: 12
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)',
+                                    drawBorder: false
+                                },
+                                ticks: {
+                                    color: '#b0b0b0'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false,
+                                    drawBorder: false
+                                },
+                                ticks: {
+                                    color: '#b0b0b0'
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // Show chart container with animation
+                starChartContainer.classList.add('visible');
+            }
+            
+            function generateAIInsights() {
+                const aiInsights = document.getElementById('ai-insights-content');
+                aiInsights.innerHTML = `
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                `;
+                
+                // Simulate AI processing (in a real app, this would call an API)
+                setTimeout(() => {
+                    const insights = [
+                        {
+                            title: "Language Specialization",
+                            content: "Your profile shows strong expertise in JavaScript and Python, with significant contributions in these languages. Consider showcasing these as your primary skills for relevant opportunities."
+                        },
+                        {
+                            title: "Collaboration Potential",
+                            content: "With ${document.getElementById('followers').textContent} followers and ${document.getElementById('following').textContent} following, you have a growing network. Engaging more with the community could lead to interesting collaborations."
+                        },
+                        {
+                            title: "Project Impact",
+                            content: "Your repositories have accumulated ${document.getElementById('stars').textContent} stars, indicating good project visibility. The most popular repositories appear to be those related to web development."
+                        },
+                        {
+                            title: "Consistency Analysis",
+                            content: "Your commit history shows periods of high activity. Maintaining consistent contributions could help grow your GitHub presence further."
+                        },
+                        {
+                            title: "Skill Diversification",
+                            content: "While you have strong skills in several languages, adding one more backend language (like Go or Rust) could make your profile even more versatile."
+                        }
+                    ];
+                    
+                    aiInsights.innerHTML = '';
+                    insights.forEach(insight => {
+                        const card = document.createElement('div');
+                        card.className = 'ai-insight-card';
+                        card.innerHTML = `
+                            <h3><i class="fas fa-lightbulb"></i> ${insight.title}</h3>
+                            <p>${insight.content}</p>
+                        `;
+                        aiInsights.appendChild(card);
+                    });
+                    
+                    document.getElementById('ai-magic-button').innerHTML = '<i class="fas fa-sync-alt"></i> Regenerate Insights';
+                    document.getElementById('ai-magic-button').disabled = false;
+                    
+                    // Show insights section
+                    document.getElementById('ai-insights').classList.add('visible');
+                }, 3000);
+            }
+            
+            function handleDataErrors() {
+                document.querySelectorAll('.loading').forEach(el => {
+                    el.innerHTML = '<p>Error loading data. Please refresh or try again later.</p>';
+                });
+            }
+            
+            function getLanguageColor(language) {
+                const colors = {
+                    'JavaScript': '#f1e05a',
+                    'Python': '#3572A5',
+                    'Java': '#b07219',
+                    'TypeScript': '#3178c6',
+                    'C++': '#f34b7d',
+                    'C#': '#178600',
+                    'PHP': '#4F5D95',
+                    'Ruby': '#701516',
+                    'Go': '#00ADD8',
+                    'Swift': '#ffac45',
+                    'Kotlin': '#F18E33',
+                    'Rust': '#dea584',
+                    'Shell': '#89e051',
+                    'HTML': '#e34c26',
+                    'CSS': '#563d7c',
+                    'SCSS': '#c6538c',
+                    'Vue': '#41b883',
+                    'Dart': '#00B4AB',
+                    'Elixir': '#6e4a7e',
+                    'Clojure': '#db5855',
+                    'R': '#198CE7',
+                    'Scala': '#c22d40',
+                    'Haskell': '#5e5086',
+                    'Lua': '#000080',
+                    'Perl': '#0298c3',
+                    'PowerShell': '#012456',
+                    'TeX': '#3D6117'
+                };
+                
+                return colors[language] || '#8e24aa';
+            }
+            
+            function formatSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            function timeAgo(date) {
+                const seconds = Math.floor((new Date() - date) / 1000);
+                
+                let interval = Math.floor(seconds / 31536000);
+                if (interval >= 1) return interval + " year" + (interval === 1 ? "" : "s") + " ago";
+                
+                interval = Math.floor(seconds / 2592000);
+                if (interval >= 1) return interval + " month" + (interval === 1 ? "" : "s") + " ago";
+                
+                interval = Math.floor(seconds / 86400);
+                if (interval >= 1) return interval + " day" + (interval === 1 ? "" : "s") + " ago";
+                
+                interval = Math.floor(seconds / 3600);
+                if (interval >= 1) return interval + " hour" + (interval === 1 ? "" : "s") + " ago";
+                
+                interval = Math.floor(seconds / 60);
+                if (interval >= 1) return interval + " minute" + (interval === 1 ? "" : "s") + " ago";
+                
+                return Math.floor(seconds) + " second" + (seconds === 1 ? "" : "s") + " ago";
+            }
         });
     </script>
 </body>
