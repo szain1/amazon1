@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latest US News</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+  <div class="container mx-auto px-4 py-6">
+    <h1 class="text-4xl font-bold mb-6 text-center">📰 Latest US News</h1>
+    <div id="news-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </div>
+
+  <script>
+    const API_KEY = "22793fc487974694bda62f38a77e3a11";
+    const URL = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`;
+
+    async function fetchNews() {
+      try {
+        const res = await fetch(URL);
+        const data = await res.json();
+        const articles = data.articles;
+
+        const container = document.getElementById("news-container");
+        container.innerHTML = "";
+
+        articles.forEach(article => {
+          const card = document.createElement("div");
+          card.className = "bg-white rounded-xl shadow-md overflow-hidden";
+
+          card.innerHTML = `
+            <img src="${article.urlToImage || 'https://via.placeholder.com/400x200'}" alt="News Image" class="w-full h-48 object-cover">
+            <div class="p-4">
+              <h2 class="font-bold text-lg mb-2">${article.title}</h2>
+              <p class="text-sm text-gray-700 mb-4">${article.description || ''}</p>
+              <a href="${article.url}" target="_blank" class="text-blue-600 hover:underline">Read more</a>
+            </div>
+          `;
+
+          container.appendChild(card);
+        });
+      } catch (error) {
+        console.error("Error fetching news:", error);
+        document.getElementById("news-container").innerHTML = `<p class="text-red-500">Failed to load news.</p>`;
+      }
+    }
+
+    fetchNews();
+  </script>
+</body>
+</html>
