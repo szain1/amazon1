@@ -620,7 +620,7 @@
 
     <script>
         // Initialize EmailJS (replace with your actual credentials)
-        emailjs.init('YOUR_EMAILJS_USER_ID');
+        emailjs.init('talktozainn@gmail.com');
 
         // Create animated background circles
         const animatedBg = document.getElementById('animated-bg');
@@ -688,7 +688,7 @@
             
             if (isValid) {
                 // Send form data via EmailJS
-                emailjs.sendForm('YOUR_EMAILJS_SERVICE_ID', 'YOUR_EMAILJS_TEMPLATE_ID', this)
+                emailjs.sendForm('talktozainn@gmail.com', 'template_abcd1234', this)
                     .then(function() {
                         // Show success message
                         successMessage.style.display = 'block';
