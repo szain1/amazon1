@@ -3,215 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News Headlines</title>
+    <title>Crypto Daily News</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
             color: #333;
-        }
-        
-        header {
-            background-color: #1a73e8;
-            color: white;
-            padding: 1rem;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        h1 {
-            margin: 0;
-            font-size: 1.8rem;
-        }
-        
-        .container {
             max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
         }
-        
-        .news-grid {
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .news-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
         }
-        
         .news-card {
             background: white;
             border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
         }
-        
         .news-card:hover {
             transform: translateY(-5px);
         }
-        
         .news-image {
             width: 100%;
-            height: 180px;
+            height: 200px;
             object-fit: cover;
         }
-        
         .news-content {
-            padding: 1rem;
+            padding: 20px;
         }
-        
         .news-title {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-            color: #1a73e8;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
         }
-        
         .news-description {
-            font-size: 0.9rem;
             color: #666;
-            margin-bottom: 1rem;
+            margin-bottom: 15px;
         }
-        
-        .news-source {
+        .news-meta {
             display: flex;
             justify-content: space-between;
-            font-size: 0.8rem;
-            color: #888;
+            color: #7f8c8d;
+            font-size: 0.9rem;
         }
-        
         .loading {
             text-align: center;
-            padding: 2rem;
             font-size: 1.2rem;
-            color: #666;
+            padding: 40px;
         }
-        
         .error {
-            color: #d32f2f;
+            color: #e74c3c;
             text-align: center;
-            padding: 2rem;
-        }
-        
-        @media (max-width: 768px) {
-            .news-grid {
-                grid-template-columns: 1fr;
-            }
+            padding: 20px;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Latest News Headlines</h1>
-    </header>
-    
-    <div class="container">
-        <div id="news-container" class="news-grid">
-            <div class="loading">Loading news...</div>
-        </div>
+    <h1>Cryptocurrency Daily News</h1>
+    <div id="news-container" class="news-container">
+        <div class="loading">Loading news...</div>
     </div>
 
     <script>
-        // =============================================
-        // FRONTEND CODE - This runs in the browser
-        // =============================================
         document.addEventListener('DOMContentLoaded', function() {
-            // Using a free proxy service (might have limitations)
-            // For a production app, you should set up your own proxy server
-            const proxyUrl = 'https://api.allorigins.win/get?url=';
-            const encodedApiUrl = encodeURIComponent('https://newsapi.org/v2/top-headlines?country=us&apiKey=22793fc487974694bda62f38a77e3a11');
+            const apiUrl = 'https://cryptocurrency-news2.p.rapidapi.com/v1/cryptodaily';
+            const container = document.getElementById('news-container');
             
-            fetch(proxyUrl + encodedApiUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    try {
-                        const newsData = JSON.parse(data.contents);
-                        if (newsData.status === 'ok' && newsData.articles.length > 0) {
-                            displayNews(newsData.articles);
-                        } else {
-                            showError('No news articles found.');
-                        }
-                    } catch (e) {
-                        showError('Error parsing news data.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching news:', error);
-                    showError('Failed to load news. Please try again later.');
-                });
-            
-            function displayNews(articles) {
-                const newsContainer = document.getElementById('news-container');
-                newsContainer.innerHTML = '';
+            fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'x-rapidapi-host': 'cryptocurrency-news2.p.rapidapi.com',
+                    // Note: You would typically need an API key here
+                    // 'x-rapidapi-key': 'your-api-key-here'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Clear loading message
+                container.innerHTML = '';
                 
-                articles.forEach(article => {
-                    const newsCard = document.createElement('div');
-                    newsCard.className = 'news-card';
-                    
-                    const image = article.urlToImage ? 
-                        `<img src="${article.urlToImage}" alt="${article.title}" class="news-image" onerror="this.onerror=null;this.src='https://via.placeholder.com/300x180?text=No+Image'">` :
-                        `<div class="news-image" style="background:#eee;display:flex;align-items:center;justify-content:center;">
-                            <span>No Image Available</span>
-                        </div>`;
-                    
-                    newsCard.innerHTML = `
-                        ${image}
-                        <div class="news-content">
-                            <h3 class="news-title">${article.title || 'No title available'}</h3>
-                            <p class="news-description">${article.description || 'No description available'}</p>
-                            <div class="news-source">
-                                <span>${article.source.name || 'Unknown source'}</span>
-                                <span>${new Date(article.publishedAt).toLocaleDateString()}</span>
+                if (data.data && data.data.length > 0) {
+                    data.data.forEach(newsItem => {
+                        const newsCard = document.createElement('div');
+                        newsCard.className = 'news-card';
+                        
+                        let imageHtml = '';
+                        if (newsItem.thumbnail) {
+                            imageHtml = `<img src="${newsItem.thumbnail}" alt="${newsItem.title}" class="news-image">`;
+                        }
+                        
+                        newsCard.innerHTML = `
+                            ${imageHtml}
+                            <div class="news-content">
+                                <h3 class="news-title">${newsItem.title}</h3>
+                                <p class="news-description">${newsItem.description || 'No description available'}</p>
+                                <div class="news-meta">
+                                    <span>${newsItem.source || 'Unknown source'}</span>
+                                    <span>${new Date(newsItem.createdAt).toLocaleDateString()}</span>
+                                </div>
                             </div>
-                            <a href="${article.url}" target="_blank" style="display:inline-block;margin-top:10px;color:#1a73e8;text-decoration:none;">Read more →</a>
-                        </div>
-                    `;
-                    
-                    newsContainer.appendChild(newsCard);
-                });
-            }
-            
-            function showError(message) {
-                const newsContainer = document.getElementById('news-container');
-                newsContainer.innerHTML = `<div class="error">${message}</div>`;
-            }
+                        `;
+                        
+                        // Make the card clickable to the news URL if available
+                        if (newsItem.url) {
+                            newsCard.style.cursor = 'pointer';
+                            newsCard.addEventListener('click', () => {
+                                window.open(newsItem.url, '_blank');
+                            });
+                        }
+                        
+                        container.appendChild(newsCard);
+                    });
+                } else {
+                    container.innerHTML = '<div class="error">No news articles found.</div>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching news:', error);
+                container.innerHTML = `<div class="error">Failed to load news. ${error.message}</div>`;
+            });
         });
-
-        // =============================================
-        // SERVER CODE - This would need to run on a server
-        // (commented out since it can't run in browser)
-        // To use this, you would need to:
-        // 1. Save this as server.js
-        // 2. Run: npm install express axios cors
-        // 3. Run: node server.js
-        // =============================================
-        /*
-        const express = require('express');
-        const axios = require('axios');
-        const cors = require('cors');
-
-        const app = express();
-        app.use(cors());
-
-        const API_KEY = '22793fc487974694bda62f38a77e3a11';
-
-        app.get('/api/news', async (req, res) => {
-          try {
-            const response = await axios.get(`https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`);
-            res.json(response.data);
-          } catch (error) {
-            res.status(500).json({ error: 'Error fetching news' });
-          }
-        });
-
-        const PORT = process.env.PORT || 3000;
-        app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-        */
     </script>
 </body>
 </html>
