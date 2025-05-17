@@ -3,489 +3,404 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Gallery</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Crypto Trends Dashboard</title>
     <style>
-        /* ===== BASE STYLES ===== */
         :root {
-            --dark-bg: #121212;
-            --darker-bg: #0a0a0a;
-            --primary: #40C4FF;
-            --primary-light: rgba(64, 196, 255, 0.2);
-            --secondary: #BB86FC;
-            --text-light: #F8F9FA;
-            --text-muted: #ADB5BD;
-            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            --primary: #af0606;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --gray: #95a5a6;
         }
-
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
-
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--text-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            overflow-x: hidden;
+            background-color: #f5f7fa;
+            color: #333;
+            padding: 20px;
         }
-
-        /* ===== PARTICLE BACKGROUND ===== */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.15;
-        }
-
-        /* ===== GALLERY STYLES ===== */
-        .gallery {
-            padding: 5rem 5%;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        .gallery-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .gallery-title {
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: inline-block;
-        }
-
-        .gallery-subtitle {
-            color: var(--text-muted);
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 2rem;
-        }
-
-        /* ===== PROJECT CARD ===== */
-        .project-card {
-            background: var(--darker-bg);
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            transition: var(--transition);
-            position: relative;
-            isolation: isolate;
-        }
-
-        .project-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, var(--primary-light), transparent 70%);
-            opacity: 0;
-            transition: var(--transition);
-            z-index: -1;
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(64, 196, 255, 0.15);
-        }
-
-        .project-card:hover::before {
-            opacity: 1;
-        }
-
-        .project-image {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            transition: var(--transition);
-        }
-
-        .project-card:hover .project-image {
-            transform: scale(1.03);
-        }
-
-        .project-content {
-            padding: 1.5rem;
-        }
-
-        .project-title {
-            font-size: 1.5rem;
-            margin-bottom: 0.75rem;
-            color: var(--text-light);
-        }
-
-        .project-description {
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        .view-images-btn {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.75rem 1.5rem;
-            background: var(--primary);
-            color: var(--darker-bg);
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            text-decoration: none;
-        }
-
-        .view-images-btn:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(187, 134, 252, 0.3);
-        }
-
-        /* ===== LIGHTBOX STYLES ===== */
-        .lightbox {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(8px);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
-            padding: 2rem;
-        }
-
-        .lightbox.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .lightbox-header {
-            width: 100%;
+        .container {
             max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        header {
+            background: var(--dark);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: var(--light);
+            font-weight: 300;
+        }
+        .status-bar {
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .status-healthy {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: var(--success);
+        }
+        .status-error {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--danger);
+        }
+        .status-warning {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: var(--warning);
+        }
+        .content {
+            padding: 20px;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--gray);
+        }
+        .error-message {
+            background-color: rgba(231, 76, 60, 0.1);
+            border-left: 4px solid var(--danger);
+            padding: 15px;
+            margin: 20px 0;
+            color: var(--danger);
+        }
+        .coin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .coin-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        .coin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .coin-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
+            margin-bottom: 10px;
         }
-
-        .lightbox-title {
-            font-size: 1.8rem;
-            color: var(--text-light);
-        }
-
-        .close-lightbox {
-            background: none;
-            border: none;
-            color: var(--text-light);
-            font-size: 2rem;
-            cursor: pointer;
-            transition: var(--transition);
+        .coin-icon {
             width: 40px;
             height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin-right: 15px;
             border-radius: 50%;
-        }
-
-        .close-lightbox:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: rotate(90deg);
-        }
-
-        .lightbox-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            width: 100%;
-            max-width: 1200px;
-            max-height: 80vh;
-            overflow-y: auto;
-            padding: 1rem;
-        }
-
-        .lightbox-image {
-            width: 100%;
-            height: 250px;
             object-fit: cover;
-            border-radius: 8px;
-            transition: var(--transition);
+        }
+        .coin-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+        .coin-symbol {
+            color: var(--gray);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        .coin-data {
+            margin-top: 10px;
+        }
+        .coin-data p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+        .coin-data strong {
+            color: var(--dark);
+        }
+        .actions {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
         }
-
-        .lightbox-image:hover {
-            transform: scale(1.02);
-            box-shadow: 0 5px 20px rgba(64, 196, 255, 0.3);
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
         }
-
-        /* ===== RESPONSIVE STYLES ===== */
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        .btn-secondary {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+        .btn-secondary:hover {
+            background-color: #d5dbdb;
+        }
+        .fallback-data {
+            background-color: rgba(243, 156, 18, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 20px 0;
+            color: var(--dark);
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.8rem;
+        }
         @media (max-width: 768px) {
-            .gallery {
-                padding: 3rem 5%;
-            }
-            
-            .gallery-title {
-                font-size: 2.2rem;
-            }
-            
-            .projects-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .lightbox-grid {
+            .coin-grid {
                 grid-template-columns: 1fr;
             }
         }
-
-        /* ===== ANIMATIONS ===== */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .project-card {
-            animation: fadeIn 0.6s ease-out forwards;
-            opacity: 0;
-        }
-
-        .project-card:nth-child(1) { animation-delay: 0.1s; }
-        .project-card:nth-child(2) { animation-delay: 0.2s; }
-        .project-card:nth-child(3) { animation-delay: 0.3s; }
-        .project-card:nth-child(4) { animation-delay: 0.4s; }
-        .project-card:nth-child(5) { animation-delay: 0.5s; }
-        .project-card:nth-child(6) { animation-delay: 0.6s; }
     </style>
 </head>
 <body>
-    <!-- Particle Background -->
-    <canvas class="particles" id="particles"></canvas>
-
-    <!-- Main Gallery -->
-    <section class="gallery">
-        <header class="gallery-header">
-            <h1 class="gallery-title">Project Gallery</h1>
-            <p class="gallery-subtitle">Explore my latest work and creative projects</p>
+    <div class="container">
+        <header>
+            <h1>Crypto Trends Dashboard</h1>
+            <p class="subtitle">Real-time trending cryptocurrencies</p>
         </header>
         
-        <div class="projects-grid">
-            <!-- Project 1 -->
-            <article class="project-card">
-                <img src="https://source.unsplash.com/random/600x400/?app,design" alt="Mobile App Design" class="project-image">
-                <div class="project-content">
-                    <h2 class="project-title">E-Commerce Mobile App</h2>
-                    <p class="project-description">
-                        A complete shopping experience with product browsing, cart functionality, and secure payments.
-                    </p>
-                    <button class="view-images-btn" data-project="project1">View All Images</button>
-                </div>
-            </article>
-            
-            <!-- Project 2 -->
-            <article class="project-card">
-                <img src="https://source.unsplash.com/random/600x400/?website,design" alt="Website Design" class="project-image">
-                <div class="project-content">
-                    <h2 class="project-title">Portfolio Website</h2>
-                    <p class="project-description">
-                        A modern, responsive portfolio showcasing creative work with smooth animations.
-                    </p>
-                    <button class="view-images-btn" data-project="project2">View All Images</button>
-                </div>
-            </article>
-            
-            <!-- Project 3 -->
-            <article class="project-card">
-                <img src="https://source.unsplash.com/random/600x400/?dashboard,ui" alt="Dashboard UI" class="project-image">
-                <div class="project-content">
-                    <h2 class="project-title">Analytics Dashboard</h2>
-                    <p class="project-description">
-                        Data visualization dashboard with interactive charts and real-time updates.
-                    </p>
-                    <button class="view-images-btn" data-project="project3">View All Images</button>
-                </div>
-            </article>
-            
-            <!-- Project 4 -->
-            <article class="project-card">
-                <img src="https://source.unsplash.com/random/600x400/?mobile,interface" alt="Mobile Interface" class="project-image">
-                <div class="project-content">
-                    <h2 class="project-title">Fitness Tracker</h2>
-                    <p class="project-description">
-                        AI-powered fitness app that tracks workouts and provides personalized recommendations.
-                    </p>
-                    <button class="view-images-btn" data-project="project4">View All Images</button>
-                </div>
-            </article>
+        <div id="statusBar" class="status-bar">
+            Checking API status...
         </div>
-    </section>
-
-    <!-- Lightbox Overlay -->
-    <div class="lightbox" id="lightbox">
-        <div class="lightbox-header">
-            <h2 class="lightbox-title" id="lightbox-title">Project Images</h2>
-            <button class="close-lightbox" id="close-lightbox">&times;</button>
+        
+        <div class="content">
+            <div id="contentArea">
+                <div class="loading">Loading cryptocurrency data...</div>
+            </div>
+            
+            <div class="actions">
+                <button id="refreshBtn" class="btn-primary">Refresh Data</button>
+                <button id="fallbackBtn" class="btn-secondary">Use Fallback Data</button>
+            </div>
         </div>
-        <div class="lightbox-grid" id="lightbox-grid">
-            <!-- Images will be inserted here by JavaScript -->
-        </div>
+        
+        <footer>
+            Data provided by CoinGecko API | Updated: <span id="updateTime"></span>
+        </footer>
     </div>
 
     <script>
-        // Particle Background
-        const canvas = document.getElementById('particles');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const particles = [];
-        const particleCount = window.innerWidth < 768 ? 30 : 80;
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 3 + 1;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.speedY = Math.random() * 1 - 0.5;
-                this.color = `rgba(64, 196, 255, ${Math.random() * 0.5 + 0.1})`;
+        // Configuration
+        const config = {
+            apiKey: 'CG-4sFwgpJ1CE4envqg9Aoi2zp9',
+            endpoints: {
+                ping: 'https://pro-api.coingecko.com/api/v3/ping',
+                trending: 'https://pro-api.coingecko.com/api/v3/search/trending',
+                fallback: 'https://api.coingecko.com/api/v3/search/trending' // Public endpoint as fallback
+            },
+            fallbackData: {
+                coins: [
+                    {
+                        item: {
+                            id: "bitcoin",
+                            name: "Bitcoin",
+                            symbol: "btc",
+                            market_cap_rank: 1,
+                            thumb: "https://assets.coingecko.com/coins/images/1/thumb/bitcoin.png",
+                            price_btc: 1,
+                            score: 100
+                        }
+                    },
+                    {
+                        item: {
+                            id: "ethereum",
+                            name: "Ethereum",
+                            symbol: "eth",
+                            market_cap_rank: 2,
+                            thumb: "https://assets.coingecko.com/coins/images/279/thumb/ethereum.png",
+                            price_btc: 0.062,
+                            score: 85
+                        }
+                    }
+                ]
             }
-
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
-                if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
-            }
-
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-            }
-            
-            requestAnimationFrame(animateParticles);
-        }
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        initParticles();
-        animateParticles();
-
-        // Lightbox Functionality
-        const lightbox = document.getElementById('lightbox');
-        const closeBtn = document.getElementById('close-lightbox');
-        const lightboxGrid = document.getElementById('lightbox-grid');
-        const lightboxTitle = document.getElementById('lightbox-title');
-        const viewButtons = document.querySelectorAll('.view-images-btn');
-
-        // Sample project images data (replace with your actual images)
-        const projects = {
-            project1: [
-                { url: 'https://source.unsplash.com/random/800x600/?app,design', alt: 'App Design 1' },
-                { url: 'https://source.unsplash.com/random/800x600/?app,screen', alt: 'App Design 2' },
-                { url: 'https://source.unsplash.com/random/800x600/?app,interface', alt: 'App Design 3' },
-                { url: 'https://source.unsplash.com/random/800x600/?app,ui', alt: 'App Design 4' }
-            ],
-            project2: [
-                { url: 'https://source.unsplash.com/random/800x600/?website,design', alt: 'Website 1' },
-                { url: 'https://source.unsplash.com/random/800x600/?website,layout', alt: 'Website 2' },
-                { url: 'https://source.unsplash.com/random/800x600/?website,responsive', alt: 'Website 3' }
-            ],
-            project3: [
-                { url: 'https://source.unsplash.com/random/800x600/?dashboard,analytics', alt: 'Dashboard 1' },
-                { url: 'https://source.unsplash.com/random/800x600/?dashboard,data', alt: 'Dashboard 2' },
-                { url: 'https://source.unsplash.com/random/800x600/?dashboard,charts', alt: 'Dashboard 3' },
-                { url: 'https://source.unsplash.com/random/800x600/?dashboard,metrics', alt: 'Dashboard 4' }
-            ],
-            project4: [
-                { url: 'https://source.unsplash.com/random/800x600/?fitness,app', alt: 'Fitness App 1' },
-                { url: 'https://source.unsplash.com/random/800x600/?workout,app', alt: 'Fitness App 2' },
-                { url: 'https://source.unsplash.com/random/800x600/?health,app', alt: 'Fitness App 3' }
-            ]
         };
 
-        // Open lightbox with project images
-        viewButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const projectId = button.dataset.project;
-                const projectName = button.closest('.project-card').querySelector('.project-title').textContent;
-                
-                lightboxTitle.textContent = projectName;
-                lightboxGrid.innerHTML = '';
-                
-                projects[projectId].forEach(image => {
-                    const imgElement = document.createElement('img');
-                    imgElement.src = image.url;
-                    imgElement.alt = image.alt;
-                    imgElement.className = 'lightbox-image';
-                    lightboxGrid.appendChild(imgElement);
+        // DOM Elements
+        const statusBar = document.getElementById('statusBar');
+        const contentArea = document.getElementById('contentArea');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const fallbackBtn = document.getElementById('fallbackBtn');
+        const updateTime = document.getElementById('updateTime');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTime.textContent = new Date().toLocaleString();
+            checkAPIStatus().then(() => fetchTrendingData());
+        });
+
+        // Event Listeners
+        refreshBtn.addEventListener('click', () => {
+            contentArea.innerHTML = '<div class="loading">Refreshing data...</div>';
+            fetchTrendingData();
+        });
+
+        fallbackBtn.addEventListener('click', () => {
+            displayFallbackNotice();
+            displayCoins(config.fallbackData.coins);
+        });
+
+        // API Functions
+        async function checkAPIStatus() {
+            try {
+                const response = await fetch(config.endpoints.ping, {
+                    headers: {
+                        'x-cg-pro-api-key': config.apiKey,
+                        'accept': 'application/json'
+                    }
                 });
                 
-                lightbox.classList.add('active');
-                document.body.style.overflow = 'hidden';
+                const data = await response.json();
+                
+                if (response.ok && data.gecko_says === '(V3) To the Moon!') {
+                    statusBar.textContent = 'API is operational and ready';
+                    statusBar.className = 'status-bar status-healthy';
+                    return true;
+                } else {
+                    throw new Error('API returned unexpected response');
+                }
+            } catch (error) {
+                statusBar.textContent = `API connection issue: ${error.message}`;
+                statusBar.className = 'status-bar status-error';
+                return false;
+            }
+        }
+
+        async function fetchTrendingData() {
+            try {
+                // Try pro API first
+                const response = await fetch(config.endpoints.trending, {
+                    headers: {
+                        'x-cg-pro-api-key': config.apiKey,
+                        'accept': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    // If pro API fails, try public endpoint
+                    if (response.status === 400 || response.status === 401) {
+                        console.warn('Pro API failed, trying public endpoint...');
+                        return await tryPublicEndpoint();
+                    }
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (!data.coins || data.coins.length === 0) {
+                    displayFallbackNotice();
+                    displayCoins(config.fallbackData.coins);
+                } else {
+                    displayCoins(data.coins);
+                }
+            } catch (error) {
+                console.error('Error fetching trending coins:', error);
+                contentArea.innerHTML = `
+                    <div class="error-message">
+                        <h3>Error Loading Data</h3>
+                        <p>${error.message}</p>
+                        <p>Possible causes:</p>
+                        <ul>
+                            <li>Invalid or rate-limited API key</li>
+                            <li>Network connectivity issues</li>
+                            <li>CoinGecko API service disruption</li>
+                        </ul>
+                        <p>Try again later or use the fallback data button.</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function tryPublicEndpoint() {
+            try {
+                const response = await fetch(config.endpoints.fallback);
+                
+                if (!response.ok) {
+                    throw new Error(`Public API request failed with status ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (!data.coins || data.coins.length === 0) {
+                    throw new Error('No data available from public endpoint');
+                }
+                
+                displayFallbackNotice();
+                displayCoins(data.coins);
+            } catch (error) {
+                console.error('Error with public endpoint:', error);
+                displayFallbackNotice();
+                displayCoins(config.fallbackData.coins);
+            }
+        }
+
+        // Display Functions
+        function displayCoins(coins) {
+            let html = `
+                <h2>Currently Trending</h2>
+                <div class="coin-grid">
+            `;
+            
+            coins.forEach(coin => {
+                const item = coin.item;
+                html += `
+                    <div class="coin-card">
+                        <div class="coin-header">
+                            <img src="${item.thumb}" alt="${item.name}" class="coin-icon" 
+                                 onerror="this.src='https://via.placeholder.com/40?text=${item.symbol.toUpperCase()}'">
+                            <div>
+                                <div class="coin-name">${item.name}</div>
+                                <div class="coin-symbol">${item.symbol.toUpperCase()}</div>
+                            </div>
+                        </div>
+                        <div class="coin-data">
+                            <p><strong>Price:</strong> ${item.price_btc.toFixed(8)} BTC</p>
+                            <p><strong>Market Cap Rank:</strong> ${item.market_cap_rank || 'N/A'}</p>
+                            <p><strong>Trend Score:</strong> ${item.score.toFixed(2)}</p>
+                        </div>
+                    </div>
+                `;
             });
-        });
+            
+            html += '</div>';
+            contentArea.innerHTML = html;
+            updateTime.textContent = new Date().toLocaleString();
+        }
 
-        // Close lightbox
-        closeBtn.addEventListener('click', () => {
-            lightbox.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        });
-
-        // Close when clicking outside content
-        lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) {
-                lightbox.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-        });
-
-        // Close with Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
-                lightbox.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-        });
+        function displayFallbackNotice() {
+            const notice = document.createElement('div');
+            notice.className = 'fallback-data';
+            notice.innerHTML = `
+                <h3>Notice: Using Fallback Data</h3>
+                <p>The live API data couldn't be loaded. Displaying cached or sample data instead.</p>
+                <p>Some information may be outdated or limited.</p>
+            `;
+            contentArea.prepend(notice);
+        }
     </script>
 </body>
 </html>
