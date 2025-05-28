@@ -114,8 +114,8 @@
       result.style.display = 'none';
 
       try {
-        // Translate to Chinese
-        const translationRes = await fetch('https://libretranslate.de/translate', {
+        // Use a more reliable LibreTranslate instance
+        const translationRes = await fetch('https://translate.argosopentech.com/translate', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
