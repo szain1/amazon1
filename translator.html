@@ -98,21 +98,7 @@
       loading.style.display = 'block';
       result.style.display = 'none';
 
-      try {
-        // Use a more reliable LibreTranslate instance
-        const translationRes = await fetch('https://translate.argosopentech.com/translate', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            q: englishText,
-            source: 'en',
-            target: 'zh',
-            format: 'text'
-          })
-        });
-
+     
         const translationData = await translationRes.json();
         const chineseText = translationData.translatedText;
 
