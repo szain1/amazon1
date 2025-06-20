@@ -1,0 +1,9 @@
+commands
+
+cd my-weather-app
+npm start
+
+
+my api key for the weather api> cb0ca47163a64acb9ff131640251906    ?
+
+gemini api   AIzaSyAGQDvQzbpc_JM2SkNfRYDzwPMbIpuNRwE    ?
